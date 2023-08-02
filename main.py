@@ -1,6 +1,9 @@
 from flask import Flask, render_template, request, redirect
+import ntpath
 #from orm import db_session
 #import json
+
+script_dir = os.path.dirname(__file__)
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'abcdef35q3pou9ihmglg7tjcdkoiy2ug'
@@ -18,7 +21,7 @@ def page_index():
 def capl_api():
     file = request.args.get('request', type = str, default = None)
     if (file == 'vi'):
-        with open('static/capl/version_info.json') as f: return f.read()
+        with open(ntpath.join(script_dir, 'static/capl/version_info.json')) as f: return f.read()
     else:
         return 'false'
 
