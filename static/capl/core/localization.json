@@ -1,0 +1,191 @@
+{
+  "localization":
+  {
+    "descwin":
+    {
+      "from":
+      {
+        "__usage": "'from' string in cell description window, capitalized",
+        "__noloc": "From",
+        "rus": "Из"
+      },
+      "author":
+      {
+        "__usage": "'author' string in cell description window, capitalized",
+        "__noloc": "Author",
+        "rus": "Автор"
+      }
+    },
+    "mm":
+    {
+      "play_button":
+      {
+        "__usage": "play button in main menu, capitalized",
+        "__noloc": "Play",
+        "rus": "Играть"
+      },
+      "exit_button":
+      {
+        "__usage": "exit button in main menu, capitalized",
+        "__noloc": "Exit",
+        "rus": "Выйти"
+      },
+      "controls":
+      {
+        "heading":
+        {
+          "__usage": "controls in main menu: heading, capitalized",
+          "__noloc": "Controls",
+          "rus": "Управление"
+        },
+        "1":
+        {
+          "__usage": "controls in main menu: [camera] movement, lowercase",
+          "__noloc": "movement",
+          "rus": "движение"
+        },
+        "2":
+        {
+          "__usage": "controls in main menu: change/switch [camera] speed, lowercase",
+          "__noloc": "change speed",
+          "rus": "сменить скорость"
+        },
+        "3":
+        {
+          "__usage": "controls in main menu: change [board] tick duration, lowercase",
+          "__noloc": "change tick duration",
+          "rus": "изменить длительность шага"
+        },
+        "4":
+        {
+          "__usage": "controls in main menu: pause [board] time, lowercase",
+          "__noloc": "pause time",
+          "rus": "остановить время"
+        },
+        "5":
+        {
+          "__usage": "controls in main menu: center camera, lowercase",
+          "__noloc": "center camera",
+          "rus": "центрировать камеру"
+        },
+        "6":
+        {
+          "__usage": "controls in main menu: object menu, lowercase",
+          "__noloc": "object menu",
+          "rus": "меню объектов"
+        },
+        "7":
+        {
+          "__usage": "controls in main menu: draw/paint, lowercase",
+          "__noloc": "draw",
+          "rus": "рисовать"
+        },
+        "8":
+        {
+          "__usage": "controls in main menu: exit to main menu, lowercase",
+          "__noloc": "exit to main menu",
+          "rus": "выйти в главное меню"
+        }
+      }
+    },
+    "start_menu":
+    {
+      "start_button":
+      {
+        "__usage": "start button in main menu's start menu, capitalized",
+        "__noloc": "Start",
+        "rus": "Начать"
+      },
+      "settings":
+      {
+        "board_width":
+        {
+          "__usage": "start menu's board settings: board width, capitalized",
+          "__noloc": "Board width",
+          "rus": "Ширина доски"
+        },
+        "board_height":
+        {
+          "__usage": "start menu's board settings: board height, capitalized",
+          "__noloc": "Board height",
+          "rus": "Высота доски"
+        }
+      }
+    },
+    "instrument":
+    {
+      "none":
+      {
+        "__usage": "Placeholder text displayed if no instrument is selected, capitalized",
+        "__noloc": "No instrument",
+        "rus": "Без инструмента"
+      },
+      "brush":
+      {
+        "__usage": "Brush instrument, capitalized",
+        "__noloc": "Brush",
+        "rus": "Кисть"
+      },
+      "shape":
+      {
+        "round":
+        {
+          "__usage": "Round shape of brush instrument, capitalized",
+          "__noloc": "Round",
+          "rus": "Круглая"
+        },
+        "square":
+        {
+          "__usage": "Square shape of brush instrument, capitalized",
+          "__noloc": "Square",
+          "rus": "Квадратная"
+        }
+      },
+      "selection":
+      {
+        "__usage": "Selection instrument, capitalized",
+        "__noloc": "Selection",
+        "rus": "Выделение"
+      },
+      "selection_brush":
+      {
+        "__usage": "Selection brush instrument, capitalized",
+        "__noloc": "Selection brush",
+        "rus": "Кисть выделения"
+      },
+      "paste":
+      {
+        "__usage": "Paste instrument, 'paste' the area of cells previously copied, a verb, capitalized",
+        "__noloc": "Paste",
+        "rus": "Вставить"
+      },
+      "line":
+      {
+        "__usage": "Drawing line instrument, capitalized",
+        "__noloc": "Line",
+        "rus": "Линия"
+      }
+    }
+  },
+  "tutorial":
+  [
+    "Welcome to localization.json, fellow translators! This file is used to localize Casual Playground's strings",
+    "to different languages. Each in-game text can be translated to preferred language by player. How texts will",
+    "look in the game depends on this file. 'localization' is a dictionary with a tree structure: leaf nodes",
+    "of this tree are locstrings - dictionary with several keys, described below:",
+
+    "1) key '__usage' (set by developer) that describes where this locstring is used in the game; at the end",
+    "of '__usage' key there should be an instruction, telling if this locstring in every its language variant",
+    "should be uppercase, lowercase, or capitalized (first letter is uppercase, each other is lowercase) if",
+    "this language differs lowercase and uppercase letters.",
+    "2) key '__noloc' that is a standard version of string if it wasn't (yet) localized into player's preferred",
+    "language; '__noloc' is an english version of string by default.",
+    "3) other keys are being 3-letter code of language this string is being localized to (see ISO 639-2).",
+    "For example: 'rus' is Russian variant of string, 'deu' is German, 'fra' is French, 'fin' is Finnish and so on.",
+    "English doesn't need translation because '__noloc' is already an english variant of string.",
+
+    "Translation is mainly made by community, because developer doesn't know any language except Russian and English.",
+    "You can make your contribution to game's localization on Casual Playground repo's 'loc' branch:",
+    "https://github.com/NottLexa/Casual-Playground/tree/loc"
+  ]
+}

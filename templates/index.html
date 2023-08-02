@@ -1,0 +1,53 @@
+{% extends "ext.html" %}
+
+{% block head %}
+    <title>Casual Playground WEB 0.4.0 ALPHA BUILD</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/capl.css') }}" />
+{% endblock %}
+
+{% block body %}
+    <div style="font-family: 'Montserrat', sans-serif">
+        <table style="width: 100%; padding: 8px 16px">
+            <tr>
+                <td style="margin: 0; padding: 0; color: #444">
+                    <div style="font-size: 2rem; display: inline">Casual Playground</div>
+                    <a class="gray" style="font-size: 1rem" href="https://youtube.com/@NotLexa">by NotLexa</a>
+                </td>
+                <td style="margin: 0; padding: 0; width: 1%; white-space: nowrap">
+                    <table style="padding: 8px">
+                        <tr>
+                            <td>
+                                <form action="https://boosty.to/notlexa">
+                                    <input class="boosty-button" type="submit" value="Support Casual Playground!" />
+                                </form>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <div style="display: flex; justify-content: center">
+            <div style="background: black; height: 33.75vmax; width: 60vmax; padding: 4px">
+                <canvas id="CasualPlaygroundCanvas"></canvas>
+            </div>
+        </div>
+        <div style="text-align: center; padding: 20px; align-items: center; font-size: 0.75rem" class="copyright">
+            <p>Copyright © 2023 Alexey Kozhanov</p>
+            <p>
+                Casual Playground is free software: you can redistribute it and/or modify it under
+                the terms of the GNU General Public License as published by the Free Software Foundation,
+                either version 3 of the License, or (at your option) any later version.
+            </p>
+            <p>
+                Casual Playground is distributed in the hope that it will be useful, but WITHOUT ANY
+                WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+                PURPOSE. See the GNU General Public License for more details.
+            </p>
+            <p>
+                You should have received a copy of the GNU General Public License along with
+                Casual Playground. If not, see &lt;https://www.gnu.org/licenses/&gt;.
+            </p>
+        </div>
+    </div>
+    <script id="script" src="{{ url_for('static', filename='capl/CASUAL_PLAYGROUND.js') }}" platform="WEB"></script>
+{% endblock %}

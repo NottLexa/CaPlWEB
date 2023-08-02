@@ -1,0 +1,11 @@
+VERSION 1
+
+CELL "Electron head" "An electron head cell from WireWorld."
+
+NOTEXTURE 73 208 239
+
+LOCALIZATION
+    rus "Голова сигнала" "Клетка головы сигнала из WireWorld."
+
+SCRIPT STEP
+    :setcell(__X, __Y, #tail@wireworld)

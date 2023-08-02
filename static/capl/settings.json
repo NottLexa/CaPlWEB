@@ -1,0 +1,8 @@
+{
+  "history_max_length": 100,
+  "localization": "rus",
+  "localization_variants": [
+    "eng",
+    "rus"
+  ]
+}
