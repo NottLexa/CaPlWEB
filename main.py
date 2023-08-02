@@ -1,5 +1,3 @@
-#!/usr/bin/env python3.11
-
 from flask import Flask, render_template, request, redirect
 #from orm import db_session
 #import json
@@ -19,11 +17,10 @@ def page_index():
 @app.route('/api')
 def capl_api():
     file = request.args.get('request', type = str, default = None)
-    match file:
-        case 'vi':
-            with open('static/capl/version_info.json') as f: return f.read()
-        case _:
-            return 'false'
+    if (file == 'vi'):
+        with open('static/capl/version_info.json') as f: return f.read()
+    else:
+        return 'false'
 
 def main():
     app.run(port=80, host='127.0.0.1')
