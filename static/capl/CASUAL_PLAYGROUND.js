@@ -26,7 +26,7 @@ const init1 = async function ()
 {
     platform = document.getElementById('script').hasAttribute('platform')
         ? document.getElementById('script').getAttribute('platform') : 'WEB';
-    api_server = 'http://capl.rubeam.com/api/';
+    api_server = 'http://185.251.88.244/api?request=';
     console.log('Platform: '+platform);
     httpGetAsync = async function(theUrl)
     {
