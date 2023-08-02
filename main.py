@@ -3,7 +3,7 @@ import ntpath
 #from orm import db_session
 #import json
 
-script_dir = os.path.dirname(__file__)
+script_dir = ntpath.dirname(__file__)
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'abcdef35q3pou9ihmglg7tjcdkoiy2ug'
