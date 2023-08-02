@@ -21,7 +21,7 @@ def page_index():
 def capl_api():
     file = request.args.get('request', type = str, default = None)
     if (file == 'vi'):
-        with open(ntpath.join(script_dir, 'static/capl/version_info.json')) as f: return f.read()
+        with open(script_dir+'/'+'static/capl/version_info.json') as f: return f.read()
     else:
         return 'false'
 
