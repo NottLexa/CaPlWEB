@@ -34,7 +34,8 @@ def capl_api():
         return send_file(script_dir+'/'+'static/capl/core/sprites/'+file, mimetype=mime)
     if req in ['sprites_lists']:
         dir = script_dir+'/'+'static/capl/core/sprites/'+(subfolder if subfolder is not None else '')
-        return json.dumps({'results': os.listdir(dir)})
+        if ntpath.isdir(dir): return json.dumps({'results': os.listdir(dir)})
+        else: return 'false'
     else:
         return 'false'
 
