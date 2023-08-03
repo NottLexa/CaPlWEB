@@ -354,6 +354,8 @@ const init2 = async function ()
             let loaded = {};
             let req = await getapi('sprites_list', {subfolder: folder});
             console.log(req);
+            console.log(JSON.parse(req));
+            console.log(typeof JSON.parse(req));
             for (let folder_element of JSON.parse(req))
             {
                 if (folder_element.type === 'dir')
