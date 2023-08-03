@@ -359,8 +359,7 @@ const init2 = async function ()
                 let folder_element;
                 if (req.hasOwnProperty(i)) folder_element = req[i];
                 if (folder_element.type === 'dir')
-                    loaded[folder_element.name] = load_images(await getapi('sprites_list',
-                        {subfolder: folder+'%2F'+folder_element.name}), preload);
+                    loaded[folder_element.name] = load_images(folder+'%2F'+folder_element.name, preload);
                 else
                 {
                     loaded[folder_element.name] = load_img(await getapi('sprite',
