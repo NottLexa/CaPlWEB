@@ -46,3 +46,30 @@ input.boosty-button:hover {
 .copyright p {
     margin: 0 0 4px 0;
 }
+
+@keyframes spinner {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(720deg); }
+}
+
+.loader {
+    position: relative;
+    left: 50%;
+    top: 50%;
+    margin: -3vmax 0 0 -3vmax;
+    border: 1vmax solid rgba(255, 255, 255, 0.25);
+    border-bottom: 1vmax solid white;
+    border-radius: 50%;
+    width: 5vmax;
+    height: 5vmax;
+    animation: spinner 6s ease-in-out infinite;
+}
+
+.loader-text {
+    position: relative;
+    top: calc(50% + 3vmax);
+    color: white;
+    font-family: 'DejaVu Sans Mono', monospace;
+    transform: translateY(-50%);
+    text-align: center;
+}

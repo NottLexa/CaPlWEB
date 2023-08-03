@@ -639,7 +639,6 @@ const init5 = async function ()
         if (event.deltaY > 0) gvars[0].current_room.do_mouse_down(engine.WHEELDOWN);
         else gvars[0].current_room.do_mouse_down(engine.WHEELUP);
     });
-    if (platform === 'WEB') console.log('ready!');
 };
 
 const mainloop = async function (time)
@@ -660,12 +659,28 @@ const mainloop = async function (time)
 //#region [RUN]
 const run = async function ()
 {
-    await init1();
-    await init2();
-    await init3();
-    await init4();
-    await init5();
-    window.requestAnimationFrame(mainloop);
+    if (platform === 'NODE')
+    {
+        await init1();
+        await init2();
+        await init3();
+        await init4();
+        await init5();
+        window.requestAnimationFrame(mainloop);
+    }
+    else
+    {
+        let loading_state = document.getElementById('LoadingState');
+        let loading_spinner = document.getElementById('LoadingSpinner');
+        await init1(); loading_state.innerText = 'Loading... (1/5)';
+        await init2(); loading_state.innerText = 'Loading... (2/5)';
+        await init3(); loading_state.innerText = 'Loading... (3/5)';
+        await init4(); loading_state.innerText = 'Loading... (4/5)';
+        await init5(); loading_state.innerText = 'Loading... (5/5)';
+        loading_state.style.display = 'none';
+        loading_spinner.style.display = 'none';
+        window.requestAnimationFrame(mainloop);
+    }
 };
 run();
 //#endregion
