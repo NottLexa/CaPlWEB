@@ -3,6 +3,7 @@ import ntpath
 import os
 #from orm import db_session
 import json
+import base64
 
 script_dir = ntpath.dirname(__file__)
 
@@ -33,7 +34,8 @@ def capl_api():
     if req in ['sprite']:
         if file is not None and file.count('..') == 0:
             if ntpath.isfile(script_dir+'/'+'static/capl/core/sprites/'+file):
-                return send_file(script_dir+'/'+'static/capl/core/sprites/'+file, mimetype=mime)
+                with open(script_dir+'/'+'static/capl/core/sprites/'+file, 'rb') as f:
+                    return base64.b64encode(f.read())
             else:
                 return 'false'
         else:

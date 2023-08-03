@@ -342,11 +342,10 @@ const init2 = async function ()
     {
         load_modlist = ()=>{};
         load_mod = ()=>{};
-        load_img = function(path)
+        load_img = function(b64)
         {
-            console.log(path);
             let img = new Image();
-            img.src = path;
+            img.src = 'data:image/png;base64,'+b64;
             return img;
         }
         load_images = async function(folder, preload)
@@ -363,7 +362,7 @@ const init2 = async function ()
                 else
                 {
                     loaded[folder_element.name] = load_img(await getapi('sprite',
-                        {file: folder+'%2F'+folder_element.name, mime: 'image/png'}));
+                        {file: folder+'%2F'+folder_element.name}));
                     if (preload) loaded[folder_element.name].onload = ()=>{};
                 }
             }
