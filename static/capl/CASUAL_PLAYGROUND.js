@@ -352,8 +352,7 @@ const init2 = async function ()
         {
             let loaded = {};
             let req = JSON.parse(await getapi('sprites_list', {subfolder: folder}));
-            console.log(req);
-            console.log(req[0]);
+            console.log(folder, req);
             for (let i in req)
             {
                 let folder_element;
