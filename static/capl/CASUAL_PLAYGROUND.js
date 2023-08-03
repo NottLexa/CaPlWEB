@@ -639,6 +639,7 @@ const init5 = async function ()
         if (event.deltaY > 0) gvars[0].current_room.do_mouse_down(engine.WHEELDOWN);
         else gvars[0].current_room.do_mouse_down(engine.WHEELUP);
     });
+    if (platform === 'WEB') console.log('ready!');
 };
 
 const mainloop = async function (time)
