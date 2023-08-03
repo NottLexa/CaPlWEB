@@ -41,6 +41,10 @@ const DEFAULT = {
         create: undefined,
         step: undefined,
     },
+    script_string: {
+        create: '',
+        step: '',
+    },
 };
 
 const LoggerClass = {
@@ -86,16 +90,21 @@ const get = function(code = '')
         let compiler = require(compiler_path);
 
         ret = compiler.get(code, l);
+        ret[0] = {...DEFAULT, ...ret[0]}
 
         if (ret[0].hasOwnProperty('script'))
         {
             for (let i in ret[0].script)
             {
                 if (ret[0].script[i] === undefined)
+                {
                     ret[0].script[i] = (caller)=>{};
+                    ret[0].script_string[i] = '';
+                }
                 else
                 {
                     let jsc = compiler.jsconvert(ret[0].script[i]);
+                    ret[0].script_string[i] = jsc;
                     jsc = new Function('caller', 'ctt', jsc);
                     ret[0].script[i] = (caller)=>{jsc(caller, ctt)};
                 }
@@ -107,7 +116,7 @@ const get = function(code = '')
         ret = [{}, new ccc.CompilerConclusion(200),
             new ccc.CompilerCursor(err.message+'\n'+err.fileName+'\n'+err.lineNumber)];
     }
-    return [{...DEFAULT, ...ret[0]}, ret[1], ret[2]];
+    return ret;
 }
 
 const Cell = function(

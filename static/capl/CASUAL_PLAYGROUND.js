@@ -19,7 +19,7 @@ Casual Playground. If not, see <https://www.gnu.org/licenses/>.
 
 //#region [IMPORT & INIT]
 var platform, api_server, httpGetAsync, getapi;
-var engine, comp, ccc, ents, fs, path, vi;
+var engine, comp, ccc, ents, fs, path, vi, ctt;
 var version, dvlp_stage, dvlp_build;
 var scale, WIDTH, HEIGHT, WIDTH2, HEIGHT2, canvas_element, display;
 const init1 = async function ()
@@ -58,7 +58,8 @@ const init1 = async function ()
     engine = require('./core/nle.cjs');
     comp = require('./core/compiler.cjs');
     ccc = require('./core/compiler_conclusions_cursors.cjs');
-    ents = require('./core/entities/entities.cjs')
+    ctt = require('./core/compiler_task_types.cjs');
+    ents = require('./core/entities/entities.cjs');
     if (platform === 'NODE')
     {
         fs = require('fs');
@@ -352,30 +353,34 @@ const init2 = async function ()
                     console.log(2);
                     console.log(compiled);
                     let [moddata, concl, cur] = compiled;
-                    for (let jk in moddata.scripts)
+                    for (let jk in moddata.script_string)
                     {
-                        if (moddata.scripts.hasOwnProperty(jk) && moddata.scripts[jk] !== null)
-                            moddata.scripts[jk] = moddata.scripts[jk].parseFunction();
-                        let modname = content[k].slice(0, -4);
-                        moddata.origin = mod_origin;
-                        moddata.official = official;
-                        let imgpath = modname + '.png';
-                        let imgbase64 = await getapi('get_corecontent_file', {file: imgpath});
-                        if (imgbase64 !== 'false')
+                        if (moddata.script_string.hasOwnProperty(jk) && moddata.script_string[jk] !== null)
                         {
-                            moddata.texture = new Image();
-                            moddata.texture_ready = false;
-                            moddata.texture.onload = function()
-                            {
-                                moddata.texture_ready = true;
-                                gvars[0].update_board_fully = true;
-                                gvars[0].update_objmenu = true;
-                            };
-                            moddata.texture.src = 'data:image/png;base64,'+imgbase64;
+                            let jsc = moddata.script_string[jk];
+                            jsc = new Function('caller', 'ctt', jsc);
+                            moddata.script[jk] = (caller)=>{jsc(caller, ctt)};
                         }
-                        if (official) mods[modname] = moddata;
-                        else mods[`${mod_origin}/${modname}`] = moddata;
                     }
+                    let modname = content[k].slice(0, -4);
+                    moddata.origin = mod_origin;
+                    moddata.official = official;
+                    let imgpath = modname + '.png';
+                    let imgbase64 = await getapi('get_corecontent_file', {file: imgpath});
+                    if (imgbase64 !== 'false')
+                    {
+                        moddata.texture = new Image();
+                        moddata.texture_ready = false;
+                        moddata.texture.onload = function()
+                        {
+                            moddata.texture_ready = true;
+                            gvars[0].update_board_fully = true;
+                            gvars[0].update_objmenu = true;
+                        };
+                        moddata.texture.src = 'data:image/png;base64,'+imgbase64;
+                    }
+                    if (official) mods[modname] = moddata;
+                    else mods[`${mod_origin}/${modname}`] = moddata;
                 }
             }
             return mods;

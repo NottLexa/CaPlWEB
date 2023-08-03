@@ -20,7 +20,7 @@ Casual Playground. If not, see <https://www.gnu.org/licenses/>.
 
 //#region [IMPORT & INIT]
 var platform, api_server, httpGetAsync, getapi;
-var engine, comp, ccc, ents, fs, path, vi;
+var engine, comp, ccc, ents, fs, path, vi, ctt;
 var version, dvlp_stage, dvlp_build;
 var scale, WIDTH, HEIGHT, WIDTH2, HEIGHT2, canvas_element, display;
 const init1 = async function ()
@@ -59,7 +59,8 @@ const init1 = async function ()
     engine = require('./core/nle.cjs');
     comp = require('./core/compiler.cjs');
     ccc = require('./core/compiler_conclusions_cursors.cjs');
-    ents = require('./core/entities/entities.cjs')
+    ctt = require('./core/compiler_task_types.cjs');
+    ents = require('./core/entities/entities.cjs');
     if (platform === 'NODE')
     {
         fs = require('fs');
@@ -353,30 +354,34 @@ const init2 = async function ()
                     console.log(2);
                     console.log(compiled);
                     let [moddata, concl, cur] = compiled;
-                    for (let jk in moddata.scripts)
+                    for (let jk in moddata.script_string)
                     {
-                        if (moddata.scripts.hasOwnProperty(jk) && moddata.scripts[jk] !== null)
-                            moddata.scripts[jk] = moddata.scripts[jk].parseFunction();
-                        let modname = content[k].slice(0, -4);
-                        moddata.origin = mod_origin;
-                        moddata.official = official;
-                        let imgpath = modname + '.png';
-                        let imgbase64 = await getapi('get_corecontent_file', {file: imgpath});
-                        if (imgbase64 !== 'false')
+                        if (moddata.script_string.hasOwnProperty(jk) && moddata.script_string[jk] !== null)
                         {
-                            moddata.texture = new Image();
-                            moddata.texture_ready = false;
-                            moddata.texture.onload = function()
-                            {
-                                moddata.texture_ready = true;
-                                gvars[0].update_board_fully = true;
-                                gvars[0].update_objmenu = true;
-                            };
-                            moddata.texture.src = 'data:image/png;base64,'+imgbase64;
+                            let jsc = moddata.script_string[jk];
+                            jsc = new Function('caller', 'ctt', jsc);
+                            moddata.script[jk] = (caller)=>{jsc(caller, ctt)};
                         }
-                        if (official) mods[modname] = moddata;
-                        else mods[`${mod_origin}/${modname}`] = moddata;
                     }
+                    let modname = content[k].slice(0, -4);
+                    moddata.origin = mod_origin;
+                    moddata.official = official;
+                    let imgpath = modname + '.png';
+                    let imgbase64 = await getapi('get_corecontent_file', {file: imgpath});
+                    if (imgbase64 !== 'false')
+                    {
+                        moddata.texture = new Image();
+                        moddata.texture_ready = false;
+                        moddata.texture.onload = function()
+                        {
+                            moddata.texture_ready = true;
+                            gvars[0].update_board_fully = true;
+                            gvars[0].update_objmenu = true;
+                        };
+                        moddata.texture.src = 'data:image/png;base64,'+imgbase64;
+                    }
+                    if (official) mods[modname] = moddata;
+                    else mods[`${mod_origin}/${modname}`] = moddata;
                 }
             }
             return mods;
@@ -664,7 +669,7 @@ const run = async function ()
 };
 run();
 //#endregion
-},{"./core/compiler.cjs":3,"./core/compiler_conclusions_cursors.cjs":4,"./core/entities/entities.cjs":7,"./core/nle.cjs":17,"fs":18,"path":19}],2:[function(require,module,exports){
+},{"./core/compiler.cjs":3,"./core/compiler_conclusions_cursors.cjs":4,"./core/compiler_task_types.cjs":6,"./core/entities/entities.cjs":7,"./core/nle.cjs":17,"fs":18,"path":19}],2:[function(require,module,exports){
 /*
     Copyright © 2023 Alexey Kozhanov
 
@@ -806,6 +811,10 @@ const DEFAULT = {
         create: undefined,
         step: undefined,
     },
+    script_string: {
+        create: '',
+        step: '',
+    },
 };
 
 const LoggerClass = {
@@ -851,16 +860,21 @@ const get = function(code = '')
         let compiler = require(compiler_path);
 
         ret = compiler.get(code, l);
+        ret[0] = {...DEFAULT, ...ret[0]}
 
         if (ret[0].hasOwnProperty('script'))
         {
             for (let i in ret[0].script)
             {
                 if (ret[0].script[i] === undefined)
+                {
                     ret[0].script[i] = (caller)=>{};
+                    ret[0].script_string[i] = '';
+                }
                 else
                 {
                     let jsc = compiler.jsconvert(ret[0].script[i]);
+                    ret[0].script_string[i] = jsc;
                     jsc = new Function('caller', 'ctt', jsc);
                     ret[0].script[i] = (caller)=>{jsc(caller, ctt)};
                 }
@@ -872,7 +886,7 @@ const get = function(code = '')
         ret = [{}, new ccc.CompilerConclusion(200),
             new ccc.CompilerCursor(err.message+'\n'+err.fileName+'\n'+err.lineNumber)];
     }
-    return [{...DEFAULT, ...ret[0]}, ret[1], ret[2]];
+    return ret;
 }
 
 const Cell = function(
