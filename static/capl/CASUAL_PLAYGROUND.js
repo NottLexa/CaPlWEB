@@ -337,6 +337,34 @@ const init2 = async function ()
             return loaded;
         };
     }
+    else
+    {
+        load_modlist = ()=>{};
+        load_mod = ()=>{};
+        load_img = function(path)
+        {
+            let img = new Image();
+            img.src = path;
+            return img;
+        }
+        load_images = async function(folder, preload)
+        {
+            let loaded = {};
+            for (let folder_element of JSON.parse(await getapi('sprites_list', {subfolder: folder})))
+            {
+                if (folder_element.type === 'dir')
+                    loaded[folder_element.name] = load_images(await getapi('sprites_list',
+                        {subfolder: folder+'%2F'+folder_element.name}), preload);
+                else
+                {
+                    loaded[folder_element.name] = load_img(await getapi('sprite',
+                        {file: folder+'%2F'+folder_element.name}));
+                    if (preload) loaded[folder_element.name].onload = ()=>{};
+                }
+            }
+            return loaded;
+        }
+    }
 };
 //#endregion
 
@@ -364,7 +392,7 @@ const init3 = async function ()
         loc = user_settings.localization;
         locstrings = JSON.parse(await getapi('localization'))
 
-        sprites = load_images('./core/sprites', true);
+        sprites = await load_images('./core/sprites', true);
     }
 
     let fontsize = scale*2;

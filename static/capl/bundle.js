@@ -27,7 +27,7 @@ const init1 = async function ()
 {
     platform = document.getElementById('script').hasAttribute('platform')
         ? document.getElementById('script').getAttribute('platform') : 'WEB';
-    api_server = 'http://185.251.88.244/api?request=';
+    api_server = 'http://185.251.88.244/api';
     console.log('Platform: '+platform);
     httpGetAsync = async function(theUrl)
     {
@@ -42,9 +42,12 @@ const init1 = async function ()
             xhr.send(null);
         });
     }
-    getapi = async function(request)
+    getapi = async function(request, options={})
     {
-        return httpGetAsync(api_server+request);
+        options.request = request;
+        let options_array = [];
+        Objects.keys(options).forEach((key)=>{options_array.push(key+'='+options[key])})
+        return httpGetAsync(api_server+'?'+options_array.join('&'));
     };
 
     window.onerror = function(msg, url, linenumber)
@@ -335,6 +338,34 @@ const init2 = async function ()
             return loaded;
         };
     }
+    else
+    {
+        load_modlist = ()=>{};
+        load_mod = ()=>{};
+        load_img = function(path)
+        {
+            let img = new Image();
+            img.src = path;
+            return img;
+        }
+        load_images = async function(folder, preload)
+        {
+            let loaded = {};
+            for (let folder_element of JSON.parse(await getapi('sprites_list', {subfolder: folder})))
+            {
+                if (folder_element.type === 'dir')
+                    loaded[folder_element.name] = load_images(await getapi('sprites_list',
+                        {subfolder: folder+'%2F'+folder_element.name}), preload);
+                else
+                {
+                    loaded[folder_element.name] = load_img(await getapi('sprite',
+                        {file: folder+'%2F'+folder_element.name}));
+                    if (preload) loaded[folder_element.name].onload = ()=>{};
+                }
+            }
+            return loaded;
+        }
+    }
 };
 //#endregion
 
@@ -355,6 +386,14 @@ const init3 = async function ()
         if (!fs.existsSync(modsfolder)) fs.mkdirSync(modsfolder);
 
         sprites = load_images('./core/sprites', true);
+    }
+    else
+    {
+        user_settings = JSON.parse(await getapi('user_settings'));
+        loc = user_settings.localization;
+        locstrings = JSON.parse(await getapi('localization'))
+
+        sprites = await load_images('./core/sprites', true);
     }
 
     let fontsize = scale*2;

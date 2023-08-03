@@ -30,11 +30,19 @@ def capl_api():
         with open(script_dir+'/'+'static/capl/user_settings.json') as f: return f.read()
     if req in ['localization', 'locstrings']:
         with open(script_dir+'/'+'static/capl/core/localization.json') as f: return f.read()
-    if req in ['sprites']:
-        return send_file(script_dir+'/'+'static/capl/core/sprites/'+file, mimetype=mime)
-    if req in ['sprites_lists']:
+    if req in ['sprite']:
+        #return send_file(script_dir+'/'+'static/capl/core/sprites/'+file, mimetype=mime)
+        if file.count('.') == 0:
+            return script_dir+'/'+'static/capl/core/sprites/'+file
+        else:
+            return 'false'
+    if req in ['sprites_list']:
         dir = script_dir+'/'+'static/capl/core/sprites/'+(subfolder if subfolder is not None else '')
-        if ntpath.isdir(dir): return json.dumps({'results': os.listdir(dir)})
+        if ntpath.isdir(dir):
+            return json.dumps([{'type':'dir', 'name':x}
+                               if ntpath.isdir(dir+'/'+x)
+                               else {'type':'file', 'name':x}
+                               for x in os.listdir(dir)])
         else: return 'false'
     else:
         return 'false'
