@@ -3,7 +3,6 @@ const fs = require('fs');
 const path = require('path');
 var arguments = process.argv.slice(2);
 var compiled = comp.get(fs.readFileSync(path.join(__dirname, arguments[0]), {encoding: "utf8"}));
-console.log(compiled);
 var jsoned_cell = {};
 for (let k in compiled[0])
 {
