@@ -88,8 +88,7 @@ const init1 = async function ()
             devtools: false,
         };
         try {
-            vi = await getapi('vi');
-            console.log(vi);
+            vi = JSON.parse(await getapi('vi'));
         }
         catch (err) {
             console.log(err.message);
