@@ -52,12 +52,12 @@ const init1 = async function ()
         if (platform === 'NODE') nw.Window.get().close();
         return true;
     }
+    engine = require('./core/nle.cjs');
+    comp = require('./core/compiler.cjs');
+    ccc = require('./core/compiler_conclusions_cursors.cjs');
+    ents = require('./core/entities/entities.cjs')
     if (platform === 'NODE')
     {
-        engine = require('./core/nle.cjs');
-        comp = require('./core/compiler.cjs');
-        ccc = require('./core/compiler_conclusions_cursors.cjs');
-        ents = require('./core/entities/entities.cjs')
         fs = require('fs');
         path = require('path');
         try { vi = JSON.parse(fs.readFileSync('./version_info.json', {encoding: "utf8"})); }
@@ -87,7 +87,7 @@ const init1 = async function ()
             devtools: false,
         };
         try {
-            await getapi('vi', (json)=>{vi = JSON.parse(json)});
+            await getapi('vi', (json)=>{console.log('I got respond:', json); vi = JSON.parse(json)});
             console.log(vi);
         }
         catch (err) {
