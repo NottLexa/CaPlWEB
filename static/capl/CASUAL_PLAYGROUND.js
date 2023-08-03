@@ -351,7 +351,9 @@ const init2 = async function ()
         load_images = async function(folder, preload)
         {
             let loaded = {};
-            for (let folder_element of JSON.parse(await getapi('sprites_list', {subfolder: folder})))
+            let req = await getapi('sprites_list', {subfolder: folder});
+            console.log(req);
+            for (let folder_element of JSON.parse(req))
             {
                 if (folder_element.type === 'dir')
                     loaded[folder_element.name] = load_images(await getapi('sprites_list',
