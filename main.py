@@ -31,9 +31,11 @@ def capl_api():
     if req in ['localization', 'locstrings']:
         with open(script_dir+'/'+'static/capl/core/localization.json') as f: return f.read()
     if req in ['sprite']:
-        #return send_file(script_dir+'/'+'static/capl/core/sprites/'+file, mimetype=mime)
-        if file.count('..') == 0 and ntpath.isfile(script_dir+'/'+'static/capl/core/sprites/'+file):
-            return script_dir+'/'+'static/capl/core/sprites/'+file
+        if file is not None and file.count('..') == 0:
+            if ntpath.isfile(script_dir+'/'+'static/capl/core/sprites/'+file):
+                return send_file(script_dir+'/'+'static/capl/core/sprites/'+file, mimetype=mime)
+            else:
+                return 'false'
         else:
             return 'false'
     if req in ['sprites_list']:

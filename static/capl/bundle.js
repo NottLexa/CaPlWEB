@@ -359,7 +359,7 @@ const init2 = async function ()
                 else
                 {
                     loaded[folder_element.name] = load_img(await getapi('sprite',
-                        {file: folder+'%2F'+folder_element.name}));
+                        {file: folder+'%2F'+folder_element.name, mime: 'image/png'}));
                     if (preload) loaded[folder_element.name].onload = ()=>{};
                 }
             }
