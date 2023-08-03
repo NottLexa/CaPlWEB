@@ -57,11 +57,8 @@ def capl_api():
         else:
             return 'false'
     elif req in ['get_corecontent_folder']:
-        dir = script_dir + '/static/capl/core/corecontent'
-        if ntpath.isdir(dir):
-            return json.dumps(os.listdir(dir))
-        else:
-            return 'false'
+        path = script_dir+'/static/capl/core/corecontent'
+        return json.dumps(os.listdir(path))
     elif req in ['get_corecontent_file']:
         if file is not None and file.count('..') == 0:
             if ntpath.isfile(script_dir+'/static/capl/core/corecontent/'+file):
