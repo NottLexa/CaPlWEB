@@ -340,12 +340,41 @@ const init2 = async function ()
     else
     {
         load_modlist = (modsfolder)=>([]); // PLACEHOLDER
-        load_mod = function(modfolder, mod_origin, official)
+        load_mod = async function(modfolder, mod_origin, official)
         {
             let mods = {};
-            for (let filename of fs.readdirSync(modfolder, {encoding: "utf8"}))
+            let content = JSON.parse(await getapi('get_corecontent_folder'));
+            for (let k in content)
             {
-                
+                if (content.hasOwnProperty(k) && content[k].toLowerCase().endsWith('.cpl'))
+                {
+                    let [moddata, concl, cur] =
+                        JSON.parse(await getapi('compile_corecontent_cell', {file: content[k]}));
+                    for (let jk in moddata.scripts)
+                    {
+                        if (moddata.scripts.hasOwnProperty(jk) && moddata.scripts[jk] !== null)
+                            moddata.scripts[jk] = moddata.scripts[jk].parseFunction();
+                        let modname = content[k].slice(0, -4);
+                        moddata.origin = mod_origin;
+                        moddata.official = official;
+                        let imgpath = modname + '.png';
+                        let imgbase64 = await getapi('get_corecontent_file', {file: imgpath});
+                        if (imgbase64 !== 'false')
+                        {
+                            moddata.texture = new Image();
+                            moddata.texture_ready = false;
+                            moddata.texture.onload = function()
+                            {
+                                moddata.texture_ready = true;
+                                gvars[0].update_board_fully = true;
+                                gvars[0].update_objmenu = true;
+                            };
+                            moddata.texture.src = 'data:image/png;base64,'+imgbase64;
+                        }
+                        if (official) mods[modname] = moddata;
+                        else mods[`${mod_origin}/${modname}`] = moddata;
+                    }
+                }
             }
             return mods;
         };
@@ -468,6 +497,11 @@ const init3 = async function ()
     if (platform === 'NODE')
     {
         coremods = load_mod(corefolder, 'Casual Playground', 1);
+    }
+    else
+    {
+        coremods = await load_mod(corefolder, 'Casual Playground', 1);
+        console.log(coremods);
     }
     idlist.push(...Object.keys(coremods));
     objdata = {...objdata, ...coremods};
