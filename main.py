@@ -62,8 +62,12 @@ def capl_api():
     elif req in ['get_corecontent_file']:
         if file is not None and file.count('..') == 0:
             if ntpath.isfile(script_dir+'/static/capl/core/corecontent/'+file):
-                with open(script_dir+'/static/capl/core/corecontent/'+file) as f:
-                    return f.read()
+                if file.endswith('.png'):
+                    with open(script_dir+'/static/capl/core/corecontent/'+file, 'rb') as f:
+                        return base64.b64encode(f.read())
+                else:
+                    with open(script_dir+'/static/capl/core/corecontent/'+file) as f:
+                        return f.read()
             else:
                 return 'false'
         else:
