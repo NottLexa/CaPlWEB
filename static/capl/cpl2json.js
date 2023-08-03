@@ -1,7 +1,8 @@
 const comp = require('./core/compiler.cjs');
 const fs = require('fs');
+const path = require('path');
 var arguments = process.argv.slice(2);
-var compiled = comp.get(fs.readFileSync(arguments[0], {encoding: "utf8"}));
+var compiled = comp.get(fs.readFileSync(path.join(__dirname, arguments[0]), {encoding: "utf8"}));
 var jsoned_cell = {};
 for (let k in compiled[0]) jsoned_cell[k] = compiled[0][k];
 for (let k in jsoned_cell.script) jsoned_cell.script[k] = jsoned_cell.script[k].toString();
