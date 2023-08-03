@@ -46,7 +46,7 @@ const init1 = async function ()
     {
         options.request = request;
         let options_array = [];
-        Objects.keys(options).forEach((key)=>{options_array.push(key+'='+options[key])})
+        Object.keys(options).forEach((key)=>{options_array.push(key+'='+options[key])})
         return httpGetAsync(api_server+'?'+options_array.join('&'));
     };
 
@@ -344,6 +344,7 @@ const init2 = async function ()
         load_mod = ()=>{};
         load_img = function(path)
         {
+            console.log(path);
             let img = new Image();
             img.src = path;
             return img;
@@ -393,7 +394,7 @@ const init3 = async function ()
         loc = user_settings.localization;
         locstrings = JSON.parse(await getapi('localization'))
 
-        sprites = await load_images('./core/sprites', true);
+        sprites = await load_images('', true);
     }
 
     let fontsize = scale*2;

@@ -45,7 +45,7 @@ const init1 = async function ()
     {
         options.request = request;
         let options_array = [];
-        Objects.keys(options).forEach((key)=>{options_array.push(key+'='+options[key])})
+        Object.keys(options).forEach((key)=>{options_array.push(key+'='+options[key])})
         return httpGetAsync(api_server+'?'+options_array.join('&'));
     };
 
