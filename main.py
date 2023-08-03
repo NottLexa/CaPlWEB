@@ -27,7 +27,7 @@ def capl_api():
     if req in ['vi', 'version_info']:
         with open(script_dir+'/'+'static/capl/version_info.json') as f: return f.read()
     if req in ['user_settings']:
-        with open(script_dir+'/'+'static/capl/user_settings.json') as f: return f.read()
+        with open(script_dir+'/'+'static/capl/settings.json') as f: return f.read()
     if req in ['localization', 'locstrings']:
         with open(script_dir+'/'+'static/capl/core/localization.json') as f: return f.read()
     if req in ['sprite']:
