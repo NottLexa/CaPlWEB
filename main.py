@@ -4,6 +4,7 @@ import os
 #from orm import db_session
 import json
 import base64
+import subprocess
 
 script_dir = ntpath.dirname(__file__)
 
@@ -26,28 +27,59 @@ def capl_api():
     subfolder = request.args.get('subfolder', type = str, default = None)
     mime = request.args.get('mime', type = str, default = None)
     if req in ['vi', 'version_info']:
-        with open(script_dir+'/'+'static/capl/version_info.json') as f: return f.read()
-    if req in ['user_settings']:
-        with open(script_dir+'/'+'static/capl/settings.json') as f: return f.read()
-    if req in ['localization', 'locstrings']:
-        with open(script_dir+'/'+'static/capl/core/localization.json') as f: return f.read()
-    if req in ['sprite']:
+        with open(script_dir+'/static/capl/version_info.json') as f:
+            return f.read()
+    elif req in ['user_settings']:
+        with open(script_dir+'/static/capl/settings.json') as f:
+            return f.read()
+    elif req in ['localization', 'locstrings']:
+        with open(script_dir+'/static/capl/core/localization.json') as f:
+            return f.read()
+    elif req in ['sprite']:
         if file is not None and file.count('..') == 0:
-            if ntpath.isfile(script_dir+'/'+'static/capl/core/sprites/'+file):
-                with open(script_dir+'/'+'static/capl/core/sprites/'+file, 'rb') as f:
+            if ntpath.isfile(script_dir+'/static/capl/core/sprites/'+file):
+                with open(script_dir+'/static/capl/core/sprites/'+file, 'rb') as f:
                     return base64.b64encode(f.read())
             else:
                 return 'false'
         else:
             return 'false'
-    if req in ['sprites_list']:
-        dir = script_dir+'/'+'static/capl/core/sprites/'+(subfolder if subfolder is not None else '')
+    elif req in ['sprites_list']:
+        if file is not None and file.count('..') == 0:
+            dir = script_dir+'/static/capl/core/sprites/'+(subfolder if subfolder is not None else '')
+            if ntpath.isdir(dir):
+                return json.dumps([{'type':'dir', 'name':x}
+                                   if ntpath.isdir(dir+'/'+x)
+                                   else {'type':'file', 'name':x}
+                                   for x in os.listdir(dir)])
+            else:
+                return 'false'
+        else:
+            return 'false'
+    elif req in ['get_corecontent_folder']:
+        dir = script_dir + '/' + 'static/capl/core/corecontent/'
         if ntpath.isdir(dir):
-            return json.dumps([{'type':'dir', 'name':x}
-                               if ntpath.isdir(dir+'/'+x)
-                               else {'type':'file', 'name':x}
-                               for x in os.listdir(dir)])
-        else: return 'false'
+            return json.dumps(os.listdir(dir))
+        else:
+            return 'false'
+    elif req in ['get_corecontent_file']:
+        if file is not None and file.count('..') == 0:
+            if ntpath.isfile(script_dir+'/static/capl/core/corecontent/'+file):
+                with open(script_dir+'/static/capl/core/corecontent/'+file) as f:
+                    return f.read()
+            else:
+                return 'false'
+        else:
+            return 'false'
+    elif req in ['compile_corecontent_cell']:
+        if file is not None and file.count('..') == 0:
+            path = script_dir+'/static/capl/core/corecontent/'+file
+            if ntpath.isfile(path):
+                return os.popen('node '+script_dir+'/static/capl/cpl2json.js '+f'"./core/corecontent/{file}"').read()
+            else:
+                return 'false'
+        else:
+            return 'false'
     else:
         return 'false'
 

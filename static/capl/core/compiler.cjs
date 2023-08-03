@@ -65,10 +65,10 @@ const get = function(code = '')
     }
     else return [{}, new ccc.CompilerConclusion(2), new ccc.CompilerCursor()];
 
-    let compilers = fs.readdirSync(path.join('core', 'compiler_versions'));
+    let compilers = fs.readdirSync(path.join(__dirname, 'compiler_versions'));
     let compiler;
     if (compilers.includes(version)) // exact compiler name
-        {}//compiler = path.join('core', 'compiler_version', version);
+        {}//compiler = path.join(__dirname, 'compiler_version', version);
     else if ([...version].every(letter => csc.s_num.has(letter)))
     {
         let versions_filtered = compilers.filter(value => value.startsWith(`CPLv${version}`))
@@ -81,7 +81,7 @@ const get = function(code = '')
     let ret;
 
     try {
-        let compiler_path = path.join('core', 'compiler_versions', version);
+        let compiler_path = path.join(__dirname, 'compiler_versions', version);
 
         let compiler = require(compiler_path);
 

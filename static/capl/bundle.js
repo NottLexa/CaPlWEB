@@ -340,14 +340,22 @@ const init2 = async function ()
     }
     else
     {
-        load_modlist = ()=>{};
-        load_mod = ()=>{};
+        load_modlist = (modsfolder)=>([]); // PLACEHOLDER
+        load_mod = function(modfolder, mod_origin, official)
+        {
+            let mods = {};
+            for (let filename of fs.readdirSync(modfolder, {encoding: "utf8"}))
+            {
+                
+            }
+            return mods;
+        };
         load_img = function(b64)
         {
             let img = new Image();
             img.src = 'data:image/png;base64,'+b64;
             return img;
-        }
+        };
         load_images = async function(folder, preload)
         {
             let loaded = {};
@@ -367,7 +375,7 @@ const init2 = async function ()
                 }
             }
             return loaded;
-        }
+        };
     }
 };
 //#endregion
@@ -718,6 +726,7 @@ var paste_parsers = [()=>[null, 'Non existing copy-paste version'], paste1];
 
 module.exports = {copy, paste};
 },{}],3:[function(require,module,exports){
+(function (__dirname){(function (){
 /*
     Copyright © 2023 Alexey Kozhanov
 
@@ -785,10 +794,10 @@ const get = function(code = '')
     }
     else return [{}, new ccc.CompilerConclusion(2), new ccc.CompilerCursor()];
 
-    let compilers = fs.readdirSync(path.join('core', 'compiler_versions'));
+    let compilers = fs.readdirSync(path.join(__dirname, 'compiler_versions'));
     let compiler;
     if (compilers.includes(version)) // exact compiler name
-        {}//compiler = path.join('core', 'compiler_version', version);
+        {}//compiler = path.join(__dirname, 'compiler_version', version);
     else if ([...version].every(letter => csc.s_num.has(letter)))
     {
         let versions_filtered = compilers.filter(value => value.startsWith(`CPLv${version}`))
@@ -801,7 +810,7 @@ const get = function(code = '')
     let ret;
 
     try {
-        let compiler_path = path.join('core', 'compiler_versions', version);
+        let compiler_path = path.join(__dirname, 'compiler_versions', version);
 
         let compiler = require(compiler_path);
 
@@ -890,6 +899,7 @@ const Cell = function(
 }
 
 module.exports = {LoggerClass, get, Cell};
+}).call(this)}).call(this,"/core")
 },{"./compiler_conclusions_cursors.cjs":4,"./compiler_string_constants.cjs":5,"./compiler_task_types.cjs":6,"fs":18,"path":19}],4:[function(require,module,exports){
 /*
     Copyright © 2023 Alexey Kozhanov

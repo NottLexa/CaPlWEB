@@ -339,14 +339,22 @@ const init2 = async function ()
     }
     else
     {
-        load_modlist = ()=>{};
-        load_mod = ()=>{};
+        load_modlist = (modsfolder)=>([]); // PLACEHOLDER
+        load_mod = function(modfolder, mod_origin, official)
+        {
+            let mods = {};
+            for (let filename of fs.readdirSync(modfolder, {encoding: "utf8"}))
+            {
+                
+            }
+            return mods;
+        };
         load_img = function(b64)
         {
             let img = new Image();
             img.src = 'data:image/png;base64,'+b64;
             return img;
-        }
+        };
         load_images = async function(folder, preload)
         {
             let loaded = {};
@@ -366,7 +374,7 @@ const init2 = async function ()
                 }
             }
             return loaded;
-        }
+        };
     }
 };
 //#endregion
