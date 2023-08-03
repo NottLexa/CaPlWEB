@@ -76,7 +76,9 @@ def capl_api():
         if file is not None and file.count('..') == 0:
             path = script_dir+'/static/capl/core/corecontent/'+file
             if ntpath.isfile(path):
-                return os.popen('node '+script_dir+'/static/capl/cpl2json.js '+f'"./core/corecontent/{file}"').read()
+                popen_request = 'node '+script_dir+'/static/capl/cpl2json.js '+f'"./core/corecontent/{file}"'
+                print(popen_request)
+                return os.popen(popen_request).read()
             else:
                 return 'false'
         else:
