@@ -351,9 +351,9 @@ const init2 = async function ()
                 if (content.hasOwnProperty(k) && content[k].toLowerCase().endsWith('.cpl'))
                 {
                     let compiled = JSON.parse(await getapi('compile_corecontent_cell', {file: content[k]}));
-                    console.log(2);
-                    console.log(compiled);
-                    let [moddata, concl, cur] = compiled;
+                    let moddata = compiled.cell;
+                    let concl = compiled.conc;
+                    let cur = compiled.curs;
                     for (let jk in moddata.script_string)
                     {
                         if (moddata.script_string.hasOwnProperty(jk) && moddata.script_string[jk] !== null)
