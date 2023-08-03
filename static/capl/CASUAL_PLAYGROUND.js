@@ -26,7 +26,7 @@ const init1 = async function ()
 {
     platform = document.getElementById('script').hasAttribute('platform')
         ? document.getElementById('script').getAttribute('platform') : 'WEB';
-    api_server = 'http://185.251.88.244/api?request=';
+    api_server = 'http://185.251.88.244/api';
     console.log('Platform: '+platform);
     httpGetAsync = async function(theUrl)
     {
@@ -41,9 +41,12 @@ const init1 = async function ()
             xhr.send(null);
         });
     }
-    getapi = async function(request)
+    getapi = async function(request, options={})
     {
-        return httpGetAsync(api_server+request);
+        options.request = request;
+        let options_array = [];
+        Objects.keys(options).forEach((key)=>{options_array.push(key+'='+options[key])})
+        return httpGetAsync(api_server+'?'+options_array.join('&'));
     };
 
     window.onerror = function(msg, url, linenumber)
@@ -352,6 +355,14 @@ const init3 = async function ()
         modsfolder = path.join('data', 'addons');
         if (!fs.existsSync(corefolder)) fs.mkdirSync(corefolder);
         if (!fs.existsSync(modsfolder)) fs.mkdirSync(modsfolder);
+
+        sprites = load_images('./core/sprites', true);
+    }
+    else
+    {
+        user_settings = JSON.parse(await getapi('user_settings'));
+        loc = user_settings.localization;
+        locstrings = JSON.parse(await getapi('localization'))
 
         sprites = load_images('./core/sprites', true);
     }

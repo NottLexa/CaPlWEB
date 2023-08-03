@@ -18,6 +18,6 @@
   "scripts": {
     "dist": "nwbuild * ./core/** ./data/** --mode=build --zip=false --buildDir=./dist --platforms=win64,win32",
     "start": "nw .",
-    "browserify": "browserify -o bundle.js -e CASUAL_PLAYGROUND.js"
+    "browserify": "browserify CASUAL_PLAYGROUND.js > bundle.js"
   }
 }

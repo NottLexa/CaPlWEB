@@ -1,7 +1,8 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, send_file
 import ntpath
+import os
 #from orm import db_session
-#import json
+import json
 
 script_dir = ntpath.dirname(__file__)
 
@@ -19,9 +20,21 @@ def page_index():
 
 @app.route('/api')
 def capl_api():
-    file = request.args.get('request', type = str, default = None)
-    if file == 'vi':
+    req = request.args.get('request', type = str, default = None)
+    file = request.args.get('file', type = str, default = None)
+    subfolder = request.args.get('subfolder', type = str, default = None)
+    mime = request.args.get('mime', type = str, default = None)
+    if req in ['vi', 'version_info']:
         with open(script_dir+'/'+'static/capl/version_info.json') as f: return f.read()
+    if req in ['user_settings']:
+        with open(script_dir+'/'+'static/capl/user_settings.json') as f: return f.read()
+    if req in ['localization', 'locstrings']:
+        with open(script_dir+'/'+'static/capl/core/localization.json') as f: return f.read()
+    if req in ['sprites']:
+        return send_file(script_dir+'/'+'static/capl/core/sprites/'+file, mimetype=mime)
+    if req in ['sprites_lists']:
+        dir = script_dir+'/'+'static/capl/core/sprites/'+(subfolder if subfolder is not None else '')
+        return json.dumps({'results': os.listdir(dir)})
     else:
         return 'false'
 
