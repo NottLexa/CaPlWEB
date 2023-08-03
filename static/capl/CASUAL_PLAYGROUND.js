@@ -87,7 +87,7 @@ const init1 = async function ()
             devtools: false,
         };
         try {
-            await getapi('vi').then((json)=>{console.log('I got respond:', json); vi = JSON.parse(json)});
+            vi = await getapi('vi');
             console.log(vi);
         }
         catch (err) {
