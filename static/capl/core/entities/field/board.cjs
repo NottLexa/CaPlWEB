@@ -94,6 +94,7 @@ const EntFieldBoard = new engine.Entity({
     step: function(target)
     {
         let deltatime = target.gvars[0].deltatime;
+        console.log(deltatime);
         let globalkeys = target.gvars[0].globalkeys;
         if (!globalkeys.Shift && globalkeys.Equal) this.board_zoom_in(target, target.zoomspeed*deltatime);
         if (!globalkeys.Shift && globalkeys.Minus) this.board_zoom_out(target, target.zoomspeed*deltatime);
