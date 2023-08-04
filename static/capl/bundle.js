@@ -3443,8 +3443,8 @@ const EntMMStartMenu = new engine.Entity({
                     if (0 <= mouse_x && mouse_x <= wwidth && 0 <= mouse_y && mouse_y <= wheight)
                     {
                         let limit = (oneline * linesnum < wheight) ? 0 : wheight;
-                        target.new_scroll[ind] = Math.max(0, engine.clamp(target.new_scroll[ind] + scroll_delta, 0,
-                            linesnum * oneline - limit));
+                        target.new_scroll[ind] = Math.max(0, engine.clamp(target.new_scroll[ind] +
+                            target.gvars[0].scroll_delta, 0, linesnum * oneline - limit));
                         target.old_scroll[ind] = target.scroll[ind];
                         target.scroll_step[ind] = 0;
                     }
