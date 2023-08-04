@@ -120,7 +120,7 @@ const init1 = async function ()
         (' '.repeat(72-version.length-4-dvlp_build.length)) + `${version} [#${dvlp_build}]`    + '\n' +
         (' '.repeat(89-dvlp_stage.length))                  + dvlp_stage                       + '\n')
 
-    scale = 50;
+    scale = 100;
     WIDTH = 16*scale;
     HEIGHT = 9*scale;
     WIDTH2 = Math.floor(WIDTH/2);
@@ -570,6 +570,7 @@ const init5 = async function ()
     gvars[0].current_room.do_start();
     document.addEventListener('keydown', function(event)
     {
+        event.stopPropagation();
         event.preventDefault();
         gvars[0].globalkeys[event.code] = true;
         switch (event.code)
