@@ -179,7 +179,7 @@ const init1 = async function ()
     else
     {
         canvas_container = document.getElementById('CasualPlaygroundCanvasContainer');
-        let canvas_container_computed = getComputedStyle(canvas_container);
+        let computed = getComputedStyle(canvas_container);
         window.addEventListener('resize', (event)=>{
             display.resizeCanvas(engine.default_room,
                 canvas_container.offsetWidth-parseInt(computed.paddingTop)-parseInt(computed.paddingBottom),
