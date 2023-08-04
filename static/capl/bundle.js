@@ -357,7 +357,7 @@ const init2 = async function ()
                 if (content.hasOwnProperty(k) && content[k].toLowerCase().endsWith('.cpl'))
                 {
                     loading_substate.innerText =
-                        `Loading "${content[k]}" from "${modsfolder}"... (${i}/${content.length()})`;
+                        `Loading "${content[k]}" from "${modsfolder}"... (${i}/${content.length})`;
                     let compiled = JSON.parse(await getapi('compile_corecontent_cell', {file: content[k]}));
                     let moddata = compiled.cell;
                     let concl = compiled.conc;
