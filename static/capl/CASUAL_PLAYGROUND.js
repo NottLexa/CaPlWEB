@@ -120,7 +120,7 @@ const init1 = async function ()
         (' '.repeat(72-version.length-4-dvlp_build.length)) + `${version} [#${dvlp_build}]`    + '\n' +
         (' '.repeat(89-dvlp_stage.length))                  + dvlp_stage                       + '\n')
 
-    scale = 100;
+    scale = 50;
     WIDTH = 16*scale;
     HEIGHT = 9*scale;
     WIDTH2 = Math.floor(WIDTH/2);
