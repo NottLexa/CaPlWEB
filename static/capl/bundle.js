@@ -569,6 +569,10 @@ const init5 = async function ()
 {
     gvars[0].current_room = gvars[0].room_mainmenu;
     gvars[0].current_room.do_start();
+    let computed = getComputedStyle(canvas_container);
+    display.resizeCanvas(gvars[0].current_room,
+        canvas_container.offsetWidth-parseInt(computed.paddingLeft)-parseInt(computed.paddingRight),
+        canvas_container.offsetHeight-parseInt(computed.paddingTop)-parseInt(computed.paddingBottom));
     document.addEventListener('keydown', function(event)
     {
         event.stopPropagation();
