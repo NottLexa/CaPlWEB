@@ -187,9 +187,6 @@ const init1 = async function ()
         display.resizeCanvas(engine.default_room,
             canvas_container.offsetWidth-parseInt(computed.paddingLeft)-parseInt(computed.paddingRight),
             canvas_container.offsetHeight-parseInt(computed.paddingTop)-parseInt(computed.paddingBottom));
-        canvas_element.addEventListener('click', (event)=>{
-            canvas_element.focus({preventScroll: true});
-        })
     }
 };
 //#endregion
@@ -637,6 +634,8 @@ const init5 = async function ()
     });
     canvas_element.addEventListener('mousedown', function(event)
     {
+        if (platform !== 'NODE') canvas_element.focus({preventScroll: true});
+
         switch (event.button)
         {
             case engine.LMB:
