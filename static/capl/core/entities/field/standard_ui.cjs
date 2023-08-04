@@ -717,6 +717,7 @@ const EntFieldSUI = new engine.Entity({
     },
     canvas_resize: function(target, width, height)
     {
+        console.log('resized');
         let display = target.gvars[0].display;
         let measure = Math.min(height/target.gvars[0].HEIGHT, width/target.gvars[0].WIDTH);
         target.window_spacing = target.window_spacing_origin * measure;

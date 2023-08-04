@@ -370,7 +370,7 @@ const init2 = async function ()
                 if (content.hasOwnProperty(k) && content[k].toLowerCase().endsWith('.cpl'))
                 {
                     loading_substate.innerText =
-                        `Loading "${content[k]}" from "${modsfolder}"... (${i}/${content.length})`;
+                        `Loading "${content[k]}" from "${modfolder}"... (${i}/${content.length})`;
                     let compiled = JSON.parse(await getapi('compile_corecontent_cell', {file: content[k]}));
                     let moddata = compiled.cell;
                     let concl = compiled.conc;
@@ -2660,6 +2660,7 @@ const EntFieldSUI = new engine.Entity({
     },
     canvas_resize: function(target, width, height)
     {
+        console.log('resized');
         let display = target.gvars[0].display;
         let measure = Math.min(height/target.gvars[0].HEIGHT, width/target.gvars[0].WIDTH);
         target.window_spacing = target.window_spacing_origin * measure;
