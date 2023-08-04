@@ -652,14 +652,13 @@ const init5 = async function ()
 
 const mainloop = async function (time)
 {
-    console.log('A0');
     if (gvars[0].running)
     {
-        console.log('A');
         gvars[0].deltatime = (time - gvars[0].prevtime)/1000;
         gvars[0].prevtime = time;
         gvars[0].has_focus = document.hasFocus();
         display.clear();
+        console.log(gvars[0].current_room);
         gvars[0].current_room.do_step(display.buffer);
         display.render();
         window.requestAnimationFrame(mainloop);
