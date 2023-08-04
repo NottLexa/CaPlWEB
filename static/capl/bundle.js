@@ -635,7 +635,11 @@ const init5 = async function ()
     });
     canvas_element.addEventListener('mousedown', function(event)
     {
-        if (platform !== 'NODE') canvas_element.focus({preventScroll: true});
+        if (platform !== 'NODE')
+        {
+            canvas_element.focus({preventScroll: true});
+            console.log('focued!', document.activeElement);
+        }
 
         switch (event.button)
         {
@@ -687,6 +691,8 @@ const mainloop = async function (time)
         }
         else
         {
+            console.log(document.activeElement);
+            console.log(canvas_element);
             gvars[0].has_focus = document.activeElement === canvas_element;
         }
         display.clear();
