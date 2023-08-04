@@ -635,11 +635,6 @@ const init5 = async function ()
     });
     canvas_element.addEventListener('mousedown', function(event)
     {
-        if (platform !== 'NODE')
-        {
-            canvas_element.focus({preventScroll: true});
-        }
-
         switch (event.button)
         {
             case engine.LMB:
@@ -684,16 +679,7 @@ const mainloop = async function (time)
     {
         gvars[0].deltatime = (time - gvars[0].prevtime)/1000;
         gvars[0].prevtime = time;
-        if (platform === 'NODE')
-        {
-            gvars[0].has_focus = document.hasFocus();
-        }
-        else
-        {
-            canvas_element.focus({preventScroll: true});
-            console.log(document.activeElement);
-            gvars[0].has_focus = document.activeElement === canvas_element;
-        }
+        gvars[0].has_focus = document.hasFocus();
         display.clear();
         gvars[0].current_room.do_step(display.buffer);
         display.render();
