@@ -634,6 +634,7 @@ const init5 = async function ()
     });
     canvas_element.addEventListener('mousedown', function(event)
     {
+        console.log('test what the hell');
         if (platform !== 'NODE')
         {
             canvas_element.focus({preventScroll: true});
