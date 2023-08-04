@@ -209,7 +209,6 @@ const init2 = async function ()
         let pth = locstrings;
         for (let i=0; i<nodes.length; i++)
         {
-            console.log(i, pth, nodes[i], nodes);
             let dir = nodes[i];
             if (pth.hasOwnProperty(dir))
             {
@@ -459,11 +458,7 @@ const init3 = async function ()
     {
         user_settings = JSON.parse(await getapi('user_settings'));
         loc = user_settings.localization;
-        locstrings = JSON.parse(await getapi('localization'));
-        console.log(locstrings);
-        console.log(user_settings);
-        console.log(loc);
-        console.log(get_locstring('mm/controls/1'));
+        locstrings = JSON.parse(await getapi('localization')).localization;
 
         sprites = await load_images('', true);
     }
