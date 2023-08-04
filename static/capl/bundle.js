@@ -23,10 +23,14 @@ var platform, api_server, httpGetAsync, getapi;
 var engine, comp, ccc, ents, fs, path, vi, ctt;
 var version, dvlp_stage, dvlp_build;
 var scale, WIDTH, HEIGHT, WIDTH2, HEIGHT2, canvas_element, display;
+var loading_state, loading_substate, loading_spinner;
 const init1 = async function ()
 {
     platform = document.getElementById('script').hasAttribute('platform')
         ? document.getElementById('script').getAttribute('platform') : 'WEB';
+    loading_state = document.getElementById('LoadingState');
+    loading_substate = document.getElementById('LoadingSubstate');
+    loading_spinner = document.getElementById('LoadingSpinner');
     api_server = 'http://185.251.88.244/api';
     console.log('Platform: '+platform);
     httpGetAsync = async function(theUrl)
@@ -346,10 +350,14 @@ const init2 = async function ()
         {
             let mods = {};
             let content = JSON.parse(await getapi('get_corecontent_folder'));
+            let i = 0;
             for (let k in content)
             {
+                i++;
                 if (content.hasOwnProperty(k) && content[k].toLowerCase().endsWith('.cpl'))
                 {
+                    loading_substate.innerText =
+                        `Loading "${content[k]}" from "${modsfolder}"... (${i}/${content.length()})`;
                     let compiled = JSON.parse(await getapi('compile_corecontent_cell', {file: content[k]}));
                     let moddata = compiled.cell;
                     let concl = compiled.conc;
@@ -671,13 +679,11 @@ const run = async function ()
     }
     else
     {
-        let loading_state = document.getElementById('LoadingState');
-        let loading_spinner = document.getElementById('LoadingSpinner');
-        await init1(); loading_state.innerText = 'Loading... (1/5)';
-        await init2(); loading_state.innerText = 'Loading... (2/5)';
-        await init3(); loading_state.innerText = 'Loading... (3/5)';
-        await init4(); loading_state.innerText = 'Loading... (4/5)';
-        await init5(); loading_state.innerText = 'Loading... (5/5)';
+        await init1(); loading_state.innerText = 'Loading... (2/5)'; loading_substate.innerText = '';
+        await init2(); loading_state.innerText = 'Loading... (3/5)'; loading_substate.innerText = '';
+        await init3(); loading_state.innerText = 'Loading... (4/5)'; loading_substate.innerText = '';
+        await init4(); loading_state.innerText = 'Loading... (5/5)'; loading_substate.innerText = '';
+        await init5(); loading_state.innerText = 'Loaded!'; loading_substate.innerText = '';
         loading_state.style.display = 'none';
         loading_spinner.style.display = 'none';
         window.requestAnimationFrame(mainloop);
@@ -1262,7 +1268,6 @@ const EntFieldBoard = new engine.Entity({
     step: function(target)
     {
         let deltatime = target.gvars[0].deltatime;
-        console.log(deltatime);
         let globalkeys = target.gvars[0].globalkeys;
         if (!globalkeys.Shift && globalkeys.Equal) this.board_zoom_in(target, target.zoomspeed*deltatime);
         if (!globalkeys.Shift && globalkeys.Minus) this.board_zoom_out(target, target.zoomspeed*deltatime);

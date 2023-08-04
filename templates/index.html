@@ -17,7 +17,7 @@
                     <table style="padding: 8px">
                         <tr>
                             <td>
-                                <form action="https://boosty.to/notlexa">
+                                <form target="_blank" action="https://boosty.to/notlexa">
                                     <input class="boosty-button" type="submit" value="Support Casual Playground!" />
                                 </form>
                             </td>
@@ -30,7 +30,8 @@
             <div style="background: black; height: 33.75vmax; width: 60vmax; padding: 4px">
                 <canvas id="CasualPlaygroundCanvas" style="position: absolute"></canvas>
                 <div class="loader" id="LoadingSpinner"></div>
-                <div class="loader-text" id="LoadingState">Loading... (0/5)</div>
+                <div class="loader-text" id="LoadingState" style="font-size: 1vmax;">Loading... (1/5)</div>
+                <div class="loader-text" id="LoadingSubstate" style="top: calc(50% + 4vmax); font-size: 0.75vmax;"></div>
             </div>
         </div>
         <div style="text-align: center; padding: 20px; align-items: center; font-size: 0.75rem" class="copyright">
