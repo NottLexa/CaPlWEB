@@ -461,6 +461,7 @@ const init3 = async function ()
         locstrings = JSON.parse(await getapi('localization')).localization;
 
         sprites = await load_images('', true);
+        console.log(sprites);
     }
 
     let fontsize = scale*2;
