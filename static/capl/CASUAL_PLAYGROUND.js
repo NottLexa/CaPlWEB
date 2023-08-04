@@ -690,6 +690,7 @@ const mainloop = async function (time)
         else
         {
             canvas_element.focus({preventScroll: true});
+            console.log(document.activeElement);
             gvars[0].has_focus = document.activeElement === canvas_element;
         }
         display.clear();
