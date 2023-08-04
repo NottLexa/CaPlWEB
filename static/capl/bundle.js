@@ -188,6 +188,9 @@ const init1 = async function ()
         display.resizeCanvas(engine.default_room,
             canvas_container.offsetWidth-parseInt(computed.paddingLeft)-parseInt(computed.paddingRight),
             canvas_container.offsetHeight-parseInt(computed.paddingTop)-parseInt(computed.paddingBottom));
+        canvas_element.addEventListener('click', (event)=>{
+            canvas_element.focus({preventScroll: true});
+        })
     }
 };
 //#endregion
@@ -686,7 +689,6 @@ const mainloop = async function (time)
         else
         {
             gvars[0].has_focus = document.activeElement === canvas_element;
-            canvas_element.focus({preventScroll: true});
         }
         display.clear();
         gvars[0].current_room.do_step(display.buffer);
