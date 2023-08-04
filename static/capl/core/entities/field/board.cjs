@@ -303,7 +303,7 @@ const EntFieldBoard = new engine.Entity({
                                         break;
                                 }
                             }
-                            logger.push([
+                            target.gvars[0].logger.push([
                                 comp.LoggerClass.INFO,
                                 new Date(),
                                 'Redo.',
@@ -326,7 +326,7 @@ const EntFieldBoard = new engine.Entity({
                                         break;
                                 }
                             }
-                            logger.push([
+                            target.gvars[0].logger.push([
                                 comp.LoggerClass.INFO,
                                 new Date(),
                                 'Undo.',

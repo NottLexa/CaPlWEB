@@ -1501,7 +1501,7 @@ const EntFieldBoard = new engine.Entity({
                                         break;
                                 }
                             }
-                            logger.push([
+                            target.gvars[0].logger.push([
                                 comp.LoggerClass.INFO,
                                 new Date(),
                                 'Redo.',
@@ -1524,7 +1524,7 @@ const EntFieldBoard = new engine.Entity({
                                         break;
                                 }
                             }
-                            logger.push([
+                            target.gvars[0].logger.push([
                                 comp.LoggerClass.INFO,
                                 new Date(),
                                 'Undo.',
@@ -3081,10 +3081,13 @@ const EntMMController = new engine.Entity({
                 target.gvars[0].mm_intro.show_title = false;
             }
         );
-
-        target.exit_button = create_button(target.exit_button_width, target.exit_button_height, 'mm/exit_button', 0,
-            target.exit_button_yoffset, ()=>{nw.Window.get().close()}
-        );
+        if (platform === 'NODE')
+            target.exit_button = create_button(target.exit_button_width, target.exit_button_height, 'mm/exit_button', 0,
+                target.exit_button_yoffset, ()=>{nw.Window.get().close()}
+            );
+        else
+            target.exit_button = create_button(target.exit_button_width, target.exit_button_height, 'mm/exit_button', 0,
+                target.exit_button_yoffset+10000, ()=>{});
     },
     step: function(target)
     {
