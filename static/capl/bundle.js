@@ -571,7 +571,7 @@ const init5 = async function ()
     gvars[0].current_room.do_start();
     document.addEventListener('keydown', function(event)
     {
-        gvars[0].current_room.do_kb_down(event);
+        event.preventDefault();
         gvars[0].globalkeys[event.code] = true;
         switch (event.code)
         {
@@ -592,11 +592,14 @@ const init5 = async function ()
                 gvars[0].globalkeys.Meta = true;
                 break;
         }
-        if (vi.devtools && event.code === 'Enter' && event.altKey) nw.Window.get().showDevTools();
+        gvars[0].current_room.do_kb_down(event);
+        if (vi.devtools && event.code === 'Enter' && event.altKey)
+        {
+            if (platform === 'NODE') nw.Window.get().showDevTools();
+        }
     });
     document.addEventListener('keyup', function(event)
     {
-        gvars[0].current_room.do_kb_up(event);
         gvars[0].globalkeys[event.code] = false;
         switch (event.code)
         {
@@ -617,6 +620,7 @@ const init5 = async function ()
                 gvars[0].globalkeys.Meta = false;
                 break;
         }
+        gvars[0].current_room.do_kb_up(event);
     });
     canvas_element.addEventListener('mousemove', function(event)
     {
