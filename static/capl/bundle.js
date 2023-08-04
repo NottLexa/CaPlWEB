@@ -182,12 +182,12 @@ const init1 = async function ()
         let computed = getComputedStyle(canvas_container);
         window.addEventListener('resize', (event)=>{
             display.resizeCanvas(engine.default_room,
-                canvas_container.offsetWidth-parseInt(computed.paddingTop)-parseInt(computed.paddingBottom),
-                canvas_container.offsetHeight)-parseInt(computed.paddingLeft)-parseInt(computed.paddingRight);
+                canvas_container.offsetWidth-parseInt(computed.paddingLeft)-parseInt(computed.paddingRight),
+                canvas_container.offsetHeight-parseInt(computed.paddingTop)-parseInt(computed.paddingBottom));
         });
         display.resizeCanvas(engine.default_room,
-            canvas_container.offsetWidth-parseInt(computed.paddingTop)-parseInt(computed.paddingBottom),
-            canvas_container.offsetHeight)-parseInt(computed.paddingLeft)-parseInt(computed.paddingRight);
+            canvas_container.offsetWidth-parseInt(computed.paddingLeft)-parseInt(computed.paddingRight),
+            canvas_container.offsetHeight-parseInt(computed.paddingTop)-parseInt(computed.paddingBottom));
     }
 };
 //#endregion
