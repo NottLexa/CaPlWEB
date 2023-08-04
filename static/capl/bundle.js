@@ -407,7 +407,7 @@ const init2 = async function ()
             }
             return mods;
         };
-        load_img = function(b64)
+        load_img = async function(b64)
         {
             let img = new Image();
             img.src = 'data:image/png;base64,'+b64;
@@ -423,10 +423,10 @@ const init2 = async function ()
                 let folder_element;
                 if (req.hasOwnProperty(i)) folder_element = req[i];
                 if (folder_element.type === 'dir')
-                    loaded[folder_element.name] = load_images(folder+'%2F'+folder_element.name, preload);
+                    loaded[folder_element.name] = await load_images(folder+'%2F'+folder_element.name, preload);
                 else
                 {
-                    loaded[folder_element.name] = load_img(await getapi('sprite',
+                    loaded[folder_element.name] = await load_img(await getapi('sprite',
                         {file: folder+'%2F'+folder_element.name}));
                     if (preload) loaded[folder_element.name].onload = ()=>{};
                 }
