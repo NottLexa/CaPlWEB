@@ -22,7 +22,7 @@ Casual Playground. If not, see <https://www.gnu.org/licenses/>.
 var platform, api_server, httpGetAsync, getapi;
 var engine, comp, ccc, ents, fs, path, vi, ctt;
 var version, dvlp_stage, dvlp_build;
-var scale, WIDTH, HEIGHT, WIDTH2, HEIGHT2, canvas_element, display;
+var scale, WIDTH, HEIGHT, WIDTH2, HEIGHT2, canvas_element, canvas_container, display;
 var loading_state, loading_substate, loading_spinner;
 const init1 = async function ()
 {
@@ -175,6 +175,19 @@ const init1 = async function ()
         nw.Window.get().moveTo(Math.round(window.screen.width/8),
             Math.round(window.screen.height/8) - Math.round(top_panel.offsetHeight/2));
         nw.Window.get().show();
+    }
+    else
+    {
+        canvas_container = document.getElementById('CasualPlaygroundCanvasContainer');
+        let canvas_container_computed = getComputedStyle(canvas_container);
+        window.addEventListener('resize', (event)=>{
+            display.resizeCanvas(engine.default_room,
+                canvas_container.offsetWidth-parseInt(computed.paddingTop)-parseInt(computed.paddingBottom),
+                canvas_container.offsetHeight)-parseInt(computed.paddingLeft)-parseInt(computed.paddingRight);
+        });
+        display.resizeCanvas(engine.default_room,
+            canvas_container.offsetWidth-parseInt(computed.paddingTop)-parseInt(computed.paddingBottom),
+            canvas_container.offsetHeight)-parseInt(computed.paddingLeft)-parseInt(computed.paddingRight);
     }
 };
 //#endregion
@@ -658,7 +671,6 @@ const mainloop = async function (time)
         gvars[0].prevtime = time;
         gvars[0].has_focus = document.hasFocus();
         display.clear();
-        console.log(gvars[0].current_room);
         gvars[0].current_room.do_step(display.buffer);
         display.render();
         window.requestAnimationFrame(mainloop);

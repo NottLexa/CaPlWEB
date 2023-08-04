@@ -73,3 +73,10 @@ input.boosty-button:hover {
     transform: translateY(-50%);
     text-align: center;
 }
+
+.canvas-container {
+    background: black;
+    height: 33.75vmax;
+    width: 60vmax;
+    padding: 4px;
+}
