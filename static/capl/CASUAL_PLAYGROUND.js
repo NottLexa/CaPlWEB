@@ -462,6 +462,7 @@ const init3 = async function ()
         console.log(locstrings);
         console.log(user_settings);
         console.log(loc);
+        console.log(get_locstring('mm/controls/1'));
 
         sprites = await load_images('', true);
     }
