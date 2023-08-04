@@ -679,7 +679,15 @@ const mainloop = async function (time)
     {
         gvars[0].deltatime = (time - gvars[0].prevtime)/1000;
         gvars[0].prevtime = time;
-        gvars[0].has_focus = document.hasFocus();
+        if (platform === 'NODE')
+        {
+            gvars[0].has_focus = document.hasFocus();
+        }
+        else
+        {
+            gvars[0].has_focus = document.activeElement === canvas_element;
+            canvas_element.focus({preventScroll: true});
+        }
         display.clear();
         gvars[0].current_room.do_step(display.buffer);
         display.render();
