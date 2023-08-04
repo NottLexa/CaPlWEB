@@ -459,7 +459,10 @@ const init3 = async function ()
     {
         user_settings = JSON.parse(await getapi('user_settings'));
         loc = user_settings.localization;
-        locstrings = JSON.parse(await getapi('localization'))
+        locstrings = JSON.parse(await getapi('localization'));
+        console.log(locstrings);
+        console.log(user_settings);
+        console.log(loc);
 
         sprites = await load_images('', true);
     }
