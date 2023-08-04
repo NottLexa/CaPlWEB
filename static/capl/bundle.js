@@ -516,7 +516,7 @@ const init3 = async function ()
     }
     else
     {
-        coremods = await load_mod(corefolder, 'Casual Playground', 1);
+        coremods = await load_mod('corecontent', 'Casual Playground', 1);
         console.log(coremods);
     }
     idlist.push(...Object.keys(coremods));
@@ -652,8 +652,10 @@ const init5 = async function ()
 
 const mainloop = async function (time)
 {
+    console.log('A0');
     if (gvars[0].running)
     {
+        console.log('A');
         gvars[0].deltatime = (time - gvars[0].prevtime)/1000;
         gvars[0].prevtime = time;
         gvars[0].has_focus = document.hasFocus();
