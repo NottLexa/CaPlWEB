@@ -418,7 +418,6 @@ const init2 = async function ()
         {
             let loaded = {};
             let req = JSON.parse(await getapi('sprites_list', {subfolder: folder}));
-            console.log(folder, req);
             for (let i in req)
             {
                 let folder_element;
@@ -427,9 +426,10 @@ const init2 = async function ()
                     loaded[folder_element.name] = await load_images(folder+'%2F'+folder_element.name, preload);
                 else
                 {
-                    loaded[folder_element.name] = await load_img(await getapi('sprite',
+                    let name = folder_element.name.slice(0, folder_element.name.lastIndexOf('.'));
+                    loaded[name] = await load_img(await getapi('sprite',
                         {file: folder+'%2F'+folder_element.name}));
-                    if (preload) loaded[folder_element.name].onload = ()=>{};
+                    if (preload) loaded[name].onload = ()=>{};
                 }
             }
             return loaded;
