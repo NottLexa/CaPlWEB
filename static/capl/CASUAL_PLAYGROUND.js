@@ -177,6 +177,7 @@ const init1 = async function ()
     }
     else
     {
+        document.body.style.overflow = 'hidden';
         canvas_container = document.getElementById('CasualPlaygroundCanvasContainer');
         let computed = getComputedStyle(canvas_container);
         window.addEventListener('resize', (event)=>{
