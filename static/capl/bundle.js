@@ -210,6 +210,7 @@ const init2 = async function ()
         let pth = locstrings;
         for (let i=0; i<nodes.length; i++)
         {
+            console.log(i, pth);
             let dir = nodes[i];
             if (pth.hasOwnProperty(dir))
             {
