@@ -45,7 +45,7 @@ def capl_api():
         else:
             return 'false'
     elif req in ['sprites_list']:
-        if file is not None and file.count('..') == 0:
+        if subfolder is not None and subfolder.count('..') == 0:
             dir = script_dir+'/static/capl/core/sprites/'+(subfolder if subfolder is not None else '')
             if ntpath.isdir(dir):
                 return json.dumps([{'type':'dir', 'name':x}
