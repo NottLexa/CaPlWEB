@@ -80,3 +80,16 @@ input.boosty-button:hover {
     width: 60vmax;
     margin: 2px;
 }
+
+.main-table {
+    border-spacing: 0;
+}
+
+.main-table td {
+    padding: 0;
+    border: none;
+}
+
+.main-table tr {
+    height: 0;
+}

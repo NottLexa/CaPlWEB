@@ -26,14 +26,21 @@
                 </td>
             </tr>
         </table>
-        <div style="display: flex; justify-content: center">
-            <div id="CasualPlaygroundCanvasContainer" class="canvas-container">
-                <canvas id="CasualPlaygroundCanvas" style="position: absolute"></canvas>
-                <div class="loader" id="LoadingSpinner"></div>
-                <div class="loader-text" id="LoadingState" style="font-size: 2vmax;">Loading... (1/5)</div>
-                <div class="loader-text" id="LoadingSubstate" style="top: calc(50% + 4vmax); font-size: 1.5vmax;"></div>
-            </div>
-        </div>
+        <table class="main-table">
+            <tr>
+                <td style="width: 20%"></td>
+                <td style="width: 60%">
+                    <div id="CasualPlaygroundCanvasContainer" class="canvas-container">
+                        <canvas id="CasualPlaygroundCanvas" style="position: absolute"></canvas>
+                        <div class="loader" id="LoadingSpinner"></div>
+                        <div class="loader-text" id="LoadingState" style="font-size: 2vmax;">Loading... (1/5)</div>
+                        <div class="loader-text" id="LoadingSubstate" style="top: calc(50% + 4vmax); font-size: 1.5vmax;"></div>
+                    </div>
+                </td>
+                <td style="width: 20%"></td>
+            </tr>
+
+        </table>
         <div style="text-align: center; padding: 20px; align-items: center; font-size: 0.75rem" class="copyright">
             <p>Copyright © 2023 Alexey Kozhanov</p>
             <p>
