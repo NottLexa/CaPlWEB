@@ -93,3 +93,13 @@ input.boosty-button:hover {
 .main-table tr {
     height: 0;
 }
+
+a.project-links {
+    display: block;
+
+}
+
+a.project-links:link, a.project-links:visited, a.project-links:hover, a.project-links:focus, a.project-links:active {
+    color: #222;
+    font-family: 'Source Sans Pro', sans-serif;
+}
