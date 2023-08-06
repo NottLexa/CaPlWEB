@@ -97,7 +97,7 @@ const mainloop = function(time)
     update_time += deltatime;
     if (update_time > update_time_until)
     {
-        update_time -= update_time_until;
+        update_time %= update_time_until;
         cells = update_cells();
         update_canvas();
     }
