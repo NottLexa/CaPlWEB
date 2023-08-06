@@ -1,8 +1,8 @@
 .frontpage-bg {
-    animation: frontpage-bg-anim 10s linear infinite;
+    animation: frontpage-bg-anim 30s linear infinite;
     background: rgb(80, 37, 98);
-    background: linear-gradient(90deg, rgba(80,37,98,1) 0%, rgba(37,61,98,1) 50%, rgba(80,37,98,1) 100%);
-    background-size: 1000%;
+    background: linear-gradient(90deg, rgba(80,37,98,1) 0%, rgb(43, 37, 98) 50%, rgb(80, 37, 98) 100%);
+    background-size: 300vw 1px;
     font-family: 'Montserrat', sans-serif;
     color: white;
 }
@@ -12,7 +12,7 @@
         background-position: 0;
     }
     100% {
-        background-position: 100vw;
+        background-position: 300vw;
     }
 }
 
@@ -39,14 +39,17 @@ a.link-buttons, a.link-buttons:visited {
     margin: 6px;
     text-decoration: none;
     background: rgba(255, 255, 255, 0);
+    transition: background 0.1s ease-in-out;
 }
 
 a.link-buttons:hover, a.link-buttons:focus {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.15);
+    transition: background 0.1s ease-in-out;
 }
 
 a.link-buttons:active {
-    background: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.3);
+    transition: background-color 0.05s ease-in-out;
 }
 
 .description {
