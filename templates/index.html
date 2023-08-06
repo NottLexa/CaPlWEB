@@ -1,73 +1,90 @@
 {% extends "ext.html" %}
 
 {% block head %}
-    <title>Casual Playground WEB 0.4.0 ALPHA BUILD</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/capl.css') }}" />
+    <title>Casual Playground</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}" />
 {% endblock %}
 
 {% block body %}
     <div style="font-family: 'Montserrat', sans-serif">
-        <table style="width: 100%; padding: 8px 16px">
-            <tr>
-                <td style="margin: 0; padding: 0; color: #444">
-                    <div style="font-size: 2rem; display: inline">Casual Playground</div>
-                    <a class="gray" style="font-size: 1rem" href="https://youtube.com/@NotLexa">by NotLexa</a>
-                </td>
-                <td style="margin: 0; padding: 0; width: 1%; white-space: nowrap">
-                    <table style="padding: 8px">
-                        <tr>
-                            <td>
-                                <form target="_blank" action="https://boosty.to/notlexa">
-                                    <input class="boosty-button" type="submit" value="Support Casual Playground!" />
-                                </form>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
-        <table class="main-table">
-            <tr>
-                <td style="width: 20%"></td>
-                <td style="width: 60%">
-                    <div id="CasualPlaygroundCanvasContainer" class="canvas-container">
-                        <canvas id="CasualPlaygroundCanvas" style="position: absolute"></canvas>
-                        <div class="loader" id="LoadingSpinner"></div>
-                        <div class="loader-text" id="LoadingState" style="font-size: 2vmax;">Loading... (1/5)</div>
-                        <div class="loader-text" id="LoadingSubstate" style="top: calc(50% + 4vmax); font-size: 1.5vmax;"></div>
-                    </div>
-                </td>
-                <td style="width: 20%; position: relative; padding: 4px; font-size: 0.75rem">
-                    <div style="position: absolute; bottom: 0">
-                        <a class="project-links" target="_blank" href="https://notlexa.itch.io/casual-playground">
-                            Casual Playground Desktop
-                        </a>
-                        <a class="project-links" target="_blank" href="https://github.com/NottLexa/Casual-Playground">
-                            Casual Playground on GitHub
-                        </a>
-                    </div>
-                </td>
-            </tr>
-
-        </table>
-        <div style="text-align: center; padding: 20px; align-items: center; font-size: 0.75rem" class="copyright">
-            <p>Copyright © 2023 Alexey Kozhanov</p>
+        <div class="frontpage-bg" style="height: 100vh">
+            <canvas id="golcanvas" style="width: 100%; height: 100%; opacity: 15%; image-rendering: pixelated;"></canvas>
+            <div class="centered" style="text-align: center">
+                <h1 style="margin: 0; font-size: 250%; font-weight: bold">Casual Playground</h1>
+                <div style="margin: -0.5rem 0 0.5rem 0; font-size: 75%; text-align: end; opacity: 75%">
+                    by <a class="white" href="https://youtube.com/@notlexa">NotLexa</a>
+                </div>
+                <i>A grid-based 2D sandbox inspired by cellular automata.</i>
+            </div>
+            <div class="centered" style="top: 65%; display: flex; width: 100%; justify-content: center;">
+                <a class="link-buttons" style="border-color: #fff; color: #fff" href="/play">
+                    Play CaPl Online
+                </a>
+                <a class="link-buttons" style="border-color: #8df; color: #8df" href="https://notlexa.itch.io/casual-playground">
+                    Download CaPl Client
+                </a>
+                <a class="link-buttons" style="border-color: #bbb; color: #bbb" href="https://github.com/NottLexa/casual-playground">
+                    GitHub
+                </a>
+            </div>
+            <div class="centered" style="top: 80%;">
+                <img class="arrow-img" src="{{ url_for('static', filename='svg/downarrow.svg') }}" width="32" height="32"
+                     style="filter: invert(100%)" />
+            </div>
+        </div>
+        <div class="description" style="margin: 4rem 8rem">
+            <h1>What is Casual Playground?</h1>
             <p>
-                Casual Playground is free software: you can redistribute it and/or modify it under
-                the terms of the GNU General Public License as published by the Free Software Foundation,
-                either version 3 of the License, or (at your option) any later version.
+                Casual Playground (CaPl in short) is a customizable grid-based 2D-sandbox inspired by cellular
+                automatons. Casual Playground contains all needed instruments for a cellular automata user to run any
+                kind of a cellular automaton.
             </p>
             <p>
-                Casual Playground is distributed in the hope that it will be useful, but WITHOUT ANY
-                WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-                PURPOSE. See the GNU General Public License for more details.
+                Natively Casual Playground contains John Conway's Game of Life and WireWorld cells to put on a board,
+                but Casual Playground (desktop client only (now)) also has a modding support, so that any player can
+                install more custom cellular automata or write his own ones.
             </p>
             <p>
-                You should have received a copy of the GNU General Public License along with
-                Casual Playground. If not, see &lt;https://www.gnu.org/licenses/&gt;.
+                With the help of Casual Playgrounds' own programming language &ndash;
+                <b>Casual Playground Language (CPL)</b> &ndash; writing your own mods for CaPl becomes very simple.
+                Check <a href="https://github.com/NottLexa/Casual-Playground/wiki#cpl-beginner-guides">
+                    CPL Scripting Introduction on GitHub
+                </a> to begin writing mods.
+            </p>
+            <p>
+                I've been making this game all by myself for a few years in my free time. All of its code was written
+                in native JavaScript, using Node.JS environment for a desktop client that may work offline. Casual
+                Playground's source code is available on <a href="https://github.com/NottLexa/casual-playground">
+                GitHub</a>, you can contribute to the project, or download release from there.
+            </p>
+            <h1>How to start?</h1>
+            <p style="margin-bottom: 0.5rem">
+                Casual Playground is available:
+            </p>
+            <ul class="available-list">
+                <li>
+                    <a href="/play">Online</a>
+                </li>
+                <li>
+                    <a href="https://notlexa.itch.io/casual-playground">As a desktop client</a>
+                </li>
+                <li>
+                    <a href="https://github.com/NottLexa/casual-playground/releases">at GitHub repository releases</a>
+                </li>
+            </ul>
+        </div>
+        <div style="margin: 1rem 20vw; text-align: center">
+            <p style="margin-bottom: 1rem; font-size: 150%">
+                If you'd like to support my work, you can subscribe to me on Boosty (subscription service):
+            </p>
+            <form target="_blank" action="https://boosty.to/notlexa" style="margin-bottom: 1rem">
+                <input class="boosty-button" type="submit" value="Support Casual Playground!" />
+            </form>
+            <p style="color: maroon; margin-top: 0; padding: 0 10vw; font-size: 75%">
+                Unfortunately, I am not able to use more well-known subscription services like Patreon as my
+                country has a lot of economical sanctions applied to, such as SWIFT ban.
             </p>
         </div>
     </div>
-    <div id="text_window" style="visibility: hidden; margin: 0; border: 0; padding: 0; display: inline-block"></div>
-    <script id="script" src="{{ url_for('static', filename='capl/bundle.js') }}" platform="WEB"></script>
+    <script id="script" src="{{ url_for('static', filename='js/index.js') }}"></script>
 {% endblock %}

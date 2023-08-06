@@ -1,28 +1,3 @@
-@font-face {
-    font-family: 'DejaVu Sans Mono';
-    src: url('default.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'Montserrat';
-    src: url('montserrat.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'Source Sans Pro';
-    src: url('SourceSansPro.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'Source Sans Pro';
-    src: url('SourceSansPro-Italic.ttf') format('truetype');
-    font-weight: normal;
-    font-style: italic;
-}
-
 a.gray:link, a.gray:visited, a.gray:hover, a.gray:focus, a.gray:active {
     color: #444;
 }

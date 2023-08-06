@@ -1,3 +1,28 @@
+@font-face {
+    font-family: 'DejaVu Sans Mono';
+    src: url('default.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Montserrat';
+    src: url('montserrat.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Source Sans Pro';
+    src: url('SourceSansPro.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Source Sans Pro';
+    src: url('SourceSansPro-Italic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+}
+
 body {
     font-size: 125%;
 }
@@ -16,30 +41,6 @@ body {
     transform: translate(-50%, -100%);
 }
 
-.mainframe {
-    background: rgb(36,35,43);
-    background: linear-gradient(180deg, rgba(35,34,55,1) 0%, rgba(56,55,103,1) 100%);
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    color: #eee;
-    padding: 16px 64px;
-}
-
-.columned-content:after {
-    content: "";
-    display: table;
-    clear: both;
-}
-
-.column {
-    float: left;
-    padding: 16px;
-    height: 100%;
-}
-
-.reviews-frame {
-    border: solid #ddd;
-    background: rgb(85,85,85);
-    background: linear-gradient(180deg, rgba(85,85,85,1) 0%, rgba(0,0,0,1) 100%);
+a.white:link, a.white:visited, a.white:hover, a.white:focus, a.white:active {
+    color: #fff;
 }

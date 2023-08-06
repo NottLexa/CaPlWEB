@@ -20,6 +20,10 @@ def e404(error):
 def page_index():
     return render_template('index.html')
 
+@app.route('/play')
+def page_play():
+    return render_template('play.html')
+
 @app.route('/api')
 def capl_api():
     req = request.args.get('request', type = str, default = None)

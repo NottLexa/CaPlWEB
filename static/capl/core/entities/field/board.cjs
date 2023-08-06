@@ -234,7 +234,7 @@ const EntFieldBoard = new engine.Entity({
             'fill', target.text_size_default, 'left', 'top', 'white', '"Source Sans Pro"');
 
         // time elapsed
-        let clr = target.time_elapsed <= target.timepertick ? 'white' : rgb_to_style(17*14, 17, 17);
+        let clr = target.time_elapsed <= target.timepertick ? 'white' : target.gvars[0].rgb_to_style(17*14, 17, 17);
         engine.draw_text(surface,
             5, -10 + surface.canvas.height - target.text_size_default - 2*target.text_size_small,
             `${Math.round(target.time_elapsed*100000)/100000} s`,
@@ -275,7 +275,9 @@ const EntFieldBoard = new engine.Entity({
                 target.timepertick = target.get_tpt(target.tpt_power);
                 break;
             case 'Escape':
-                engine.change_current_room(room_mainmenu);
+                target.gvars[0].current_room.do_end();
+                target.gvars[0].current_room = target.gvars[0].room_mainmenu;
+                target.gvars[0].current_room.do_start();
                 break;
             case 'Equal':
                 if (globalkeys.Shift) current_instrument.scale++;
