@@ -6,6 +6,8 @@ import json
 import base64
 import subprocess
 
+cache = {'compiled_cells':{}}
+
 script_dir = ntpath.dirname(__file__)
 
 app = Flask(__name__)
@@ -85,8 +87,13 @@ def capl_api():
         if file is not None and file.count('..') == 0:
             path = script_dir+'/static/capl/core/corecontent/'+file
             if ntpath.isfile(path):
-                popen_request = 'node '+script_dir+'/static/capl/cpl2json.js '+f'"./core/corecontent/{file}"'
-                return os.popen(popen_request).read()
+                if file in cache['compiled_cells']:
+                    return cache['compiled_cells'][file]
+                else:
+                    popen_request = 'node '+script_dir+'/static/capl/cpl2json.js '+f'"./core/corecontent/{file}"'
+                    popen_return = os.popen(popen_request).read()
+                    cache['compiled_cells'][file] = popen_return
+                    return popen_return
             else:
                 return 'false'
         else:
