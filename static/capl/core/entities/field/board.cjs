@@ -317,6 +317,8 @@ const EntFieldBoard = new engine.Entity({
                         if (target.history.pointer > -1)
                         {
                             let record = target.history[target.history.pointer--];
+                            console.log(target.history);
+                            console.log(record);
                             for (let action of record)
                             {
                                 switch (action.type)

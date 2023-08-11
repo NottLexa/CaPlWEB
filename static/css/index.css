@@ -90,3 +90,18 @@ input.boosty-button:hover {
 .available-list a {
     color: black;
 }
+
+.text-animation {
+    animation: text-animation-anim 1s cubic-bezier(0.7, 0.05, 0.25, 0.9) 1;
+}
+
+@keyframes text-animation-anim {
+    0% {
+        opacity: 0;
+        margin-top: 2rem;
+    }
+    100% {
+        opacity: 1;
+        margin-top: 0;
+    }
+}

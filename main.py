@@ -15,14 +15,17 @@ app.config['SECRET_KEY'] = 'abcdef35q3pou9ihmglg7tjcdkoiy2ug'
 def e404(error):
     return render_template('404.html'), error.code
 
-@app.route('/', subdomain='capl')
-@app.route('/index', subdomain='capl')
-@app.route('/capl_index')
+@app.route('/')
+@app.route('/index')
 def page_index():
+    return render_template('index.html')
+
+@app.route('/capl')
+@app.route('/capl/index')
+def page_capl_index():
     return render_template('capl/index.html')
 
-@app.route('/play', subdomain='capl')
-@app.route('/capl_play')
+@app.route('/capl/play')
 def page_play():
     return render_template('capl/play.html')
 
