@@ -15,16 +15,16 @@ app.config['SECRET_KEY'] = 'abcdef35q3pou9ihmglg7tjcdkoiy2ug'
 def e404(error):
     return render_template('404.html'), error.code
 
-@app.route('/')
-@app.route('/index')
+@app.route('/', subdomain='capl')
+@app.route('/index', subdomain='capl')
 def page_index():
-    return render_template('index.html')
+    return render_template('capl/index.html')
 
-@app.route('/play')
+@app.route('/play', subdomain='capl')
 def page_play():
-    return render_template('play.html')
+    return render_template('capl/play.html')
 
-@app.route('/api')
+@app.route('/api', subdomain='capl')
 def capl_api():
     req = request.args.get('request', type = str, default = None)
     file = request.args.get('file', type = str, default = None)
