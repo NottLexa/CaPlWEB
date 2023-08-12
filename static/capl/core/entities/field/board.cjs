@@ -69,9 +69,9 @@ const EntFieldBoard = new engine.Entity({
         target.linecolor_infield = target.gvars[0].linecolor_infield;
         target.linecolor_outfield = target.gvars[0].linecolor_outfield;
         target.cells_to_redraw = [];
-        target.surfaces = {board: document.createElement('canvas').getContext('2d'),
-            grid:  document.createElement('canvas').getContext('2d'),
-            selection:  document.createElement('canvas').getContext('2d')};
+        target.surfaces = {board: target.gvars[0].document.createElement('canvas').getContext('2d'),
+            grid: target.gvars[0].document.createElement('canvas').getContext('2d'),
+            selection: target.gvars[0].document.createElement('canvas').getContext('2d')};
         target.surfaces.board.canvas.style.imageRendering = 'pixelated';
         target.surfaces.grid.canvas.style.imageRendering  = 'pixelated';
         target.surfaces.selection.canvas.style.imageRendering  = 'pixelated';

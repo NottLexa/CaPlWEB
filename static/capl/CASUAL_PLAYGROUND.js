@@ -23,36 +23,11 @@ var engine, comp, ccc, ents, fs, path, vi, ctt;
 var version, dvlp_stage, dvlp_build;
 var scale, WIDTH, HEIGHT, WIDTH2, HEIGHT2, canvas_element, canvas_container, display;
 var loading_state, loading_substate, loading_spinner;
+platform = document.getElementById('script').hasAttribute('platform')
+    ? document.getElementById('script').getAttribute('platform') : 'WEB';
 const init1 = async function ()
 {
-    platform = document.getElementById('script').hasAttribute('platform')
-        ? document.getElementById('script').getAttribute('platform') : 'WEB';
-    loading_state = document.getElementById('LoadingState');
-    loading_substate = document.getElementById('LoadingSubstate');
-    loading_spinner = document.getElementById('LoadingSpinner');
-    api_server = 'http://185.251.88.244/api';
     console.log('Platform: '+platform);
-    httpGetAsync = async function(theUrl)
-    {
-        return new Promise(function (resolve, reject) {
-            let xhr = new XMLHttpRequest();
-            xhr.onload = ()=>{
-                if (xhr.readyState === 4 && xhr.status === 200) resolve(xhr.response);
-                else reject({status: xhr.status, statusText: xhr.statusText});
-            }
-            xhr.onerror = ()=>{reject({status: xhr.status, statusText: xhr.statusText})};
-            xhr.open("GET", theUrl, true); // true for asynchronous
-            xhr.send(null);
-        });
-    }
-    getapi = async function(request, options={})
-    {
-        options.request = request;
-        let options_array = [];
-        Object.keys(options).forEach((key)=>{options_array.push(key+'='+options[key])})
-        return httpGetAsync(api_server+'?'+options_array.join('&'));
-    };
-
     window.onerror = function(msg, url, linenumber)
     {
         alert('Error message: '+msg+'\nURL: '+url+'\nLine Number: '+linenumber);
@@ -86,6 +61,30 @@ const init1 = async function ()
     }
     else
     {
+        loading_state = document.getElementById('LoadingState');
+        loading_substate = document.getElementById('LoadingSubstate');
+        loading_spinner = document.getElementById('LoadingSpinner');
+        api_server = 'http://185.251.88.244/api';
+        httpGetAsync = async function(theUrl)
+        {
+            return new Promise(function (resolve, reject) {
+                let xhr = new XMLHttpRequest();
+                xhr.onload = ()=>{
+                    if (xhr.readyState === 4 && xhr.status === 200) resolve(xhr.response);
+                    else reject({status: xhr.status, statusText: xhr.statusText});
+                }
+                xhr.onerror = ()=>{reject({status: xhr.status, statusText: xhr.statusText})};
+                xhr.open("GET", theUrl, true); // true for asynchronous
+                xhr.send(null);
+            });
+        }
+        getapi = async function(request, options={})
+        {
+            options.request = request;
+            let options_array = [];
+            Object.keys(options).forEach((key)=>{options_array.push(key+'='+options[key])})
+            return httpGetAsync(api_server+'?'+options_array.join('&'));
+        };
         vi = {
             version_info: {
                 version: "Unknown Version",
@@ -135,7 +134,8 @@ const init1 = async function ()
         display.resizeCanvas(engine.default_room, nw.Window.get().cWindow.width, nw.Window.get().cWindow.height);
         var resize_window1 = function (width, height)
         {
-            display.resizeCanvas(gvars[0].current_room, width, height-top_panel.offsetHeight);
+            if (typeof gvars !== 'undefined')
+                display.resizeCanvas(gvars[0].current_room, width, height-top_panel.offsetHeight);
         };
         var resize_window2 = function ()
         {
@@ -569,10 +569,13 @@ const init5 = async function ()
 {
     gvars[0].current_room = gvars[0].room_mainmenu;
     gvars[0].current_room.do_start();
-    let computed = getComputedStyle(canvas_container);
-    display.resizeCanvas(gvars[0].current_room,
-        canvas_container.offsetWidth-parseInt(computed.paddingLeft)-parseInt(computed.paddingRight),
-        canvas_container.offsetHeight-parseInt(computed.paddingTop)-parseInt(computed.paddingBottom));
+    if (platform !== 'NODE')
+    {
+        let computed = getComputedStyle(canvas_container);
+        display.resizeCanvas(gvars[0].current_room,
+            canvas_container.offsetWidth-parseInt(computed.paddingLeft)-parseInt(computed.paddingRight),
+            canvas_container.offsetHeight-parseInt(computed.paddingTop)-parseInt(computed.paddingBottom));
+    }
     document.addEventListener('keydown', function(event)
     {
         event.stopPropagation();

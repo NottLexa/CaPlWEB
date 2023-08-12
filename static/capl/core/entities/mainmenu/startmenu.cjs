@@ -161,7 +161,7 @@ const EntMMStartMenu = new engine.Entity({
         target.start_button.const_x = -surface.canvas.width/2 - target.start_button.box_width/2
             - target.start_button.triangle_width + (surface.canvas.width*target.show_step);
 
-        let surf1 = document.createElement('canvas').getContext('2d');
+        let surf1 = target.gvars[0].document.createElement('canvas').getContext('2d');
         surf1.canvas.width = ww;
         surf1.canvas.height = wh;
         surf1.fillStyle = bg;
@@ -318,7 +318,7 @@ const EntMMStartMenu = new engine.Entity({
         let box = lh-(2*ip);
         let bw = target.border_width;
 
-        let surf = document.createElement('canvas').getContext('2d');
+        let surf = target.gvars[0].document.createElement('canvas').getContext('2d');
         surf.canvas.width = sww;
         surf.canvas.height = swh;
         surf.fillStyle = bg_darker;
@@ -363,7 +363,7 @@ const EntMMStartMenu = new engine.Entity({
         let box = lh-(2*ip);
         let bw = target.border_width;
 
-        let surf = document.createElement('canvas').getContext('2d');
+        let surf = target.gvars[0].document.createElement('canvas').getContext('2d');
         surf.canvas.width = sww;
         surf.canvas.height = swh;
         surf.fillStyle = bg_darker;
