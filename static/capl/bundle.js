@@ -516,6 +516,7 @@ const init3 = async function ()
               'has_focus': false,
               'platform': platform,
               'document': document,
+              'navigator': navigator,
               'running': true,
               },
              {}];
@@ -1230,8 +1231,9 @@ const EntFieldBoard = new engine.Entity({
         target.history.pointer = -1;
         target.history.add_record = function(record)
         {
-            target.history.splice(++target.history.pointer, target.history.length, record);
-            for (let i=0;i<=(target.history.length-target.gvars[0].history_max_length); i++) target.history.shift();
+            target.history.pointer = Math.min(target.history.pointer+1, target.gvars[0].history_max_length-1);
+            target.history.splice(target.history.pointer, target.history.length, record);
+            for (let i=0;i<(target.history.length-target.gvars[0].history_max_length); i++) target.history.shift();
         };
 
         // See other initiations in room_start
@@ -1518,8 +1520,6 @@ const EntFieldBoard = new engine.Entity({
                         if (target.history.pointer > -1)
                         {
                             let record = target.history[target.history.pointer--];
-                            console.log(target.history);
-                            console.log(record);
                             for (let action of record)
                             {
                                 switch (action.type)
@@ -1838,7 +1838,7 @@ const EntFieldBoard = new engine.Entity({
                                 {
                                     if (current_instrument.pastedata[iy].hasOwnProperty(ix))
                                     {
-                                        let cellid = idlist.indexOf(current_instrument.pastedata[iy][ix]);
+                                        let cellid = target.gvars[0].idlist.indexOf(current_instrument.pastedata[iy][ix]);
                                         target.board[jy][jx].reset(cellid);
                                         target.cells_to_redraw.push([jx, jy]);
                                     }
@@ -1902,7 +1902,7 @@ const EntFieldSH = new engine.Entity({
                     if (ret !== null)
                     {
                         if (target.gvars[0].platform === 'NODE' || location.protocol === 'https:')
-                            navigator.clipboard.writeText(ret[0]);
+                            target.gvars[0].navigator.clipboard.writeText(ret[0]);
                         else
                             alert("Sorry! Casual Playground Online can't support copy/paste actions on HTTP"+
                                 "protocol. We don't have an SSL-certificate to run on HTTPS yet.\n"+
@@ -1917,7 +1917,7 @@ const EntFieldSH = new engine.Entity({
                 {
                     target.gvars[0].current_instrument.type = 'paste';
                     if (target.gvars[0].platform === 'NODE' || location.protocol === 'https:')
-                        navigator.clipboard.readText().then((clipboardtext)=>{
+                        target.gvars[0].navigator.clipboard.readText().then((clipboardtext)=>{
                             let ret = clippar.paste(clipboardtext, objdata);
                             for (let k in ret[0]) target.gvars[0].current_instrument[k] = ret[0][k];
                             console.log(ret[1]);
