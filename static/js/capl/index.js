@@ -7,8 +7,10 @@ var prevtime = null;
 var update_time = 0;
 var update_time_until = 0.2;
 var cellsize = 8;
-var cellw = Math.ceil(canvas.offsetWidth/cellsize);
-var cellh = Math.ceil(canvas.offsetHeight/cellsize);
+var bordersize = 1;
+var fullsize = cellsize+bordersize;
+var cellw = Math.ceil(canvas.offsetWidth/fullsize);
+var cellh = Math.ceil(canvas.offsetHeight/fullsize);
 var cells = [];
 
 for (let h=0; h<cellh; h++)
@@ -78,8 +80,8 @@ const update_canvas = function()
     {
         for (let w=0; w<cellw; w++)
         {
-            let dx = w*cellsize;
-            let dy = h*cellsize;
+            let dx = w*fullsize;
+            let dy = h*fullsize;
             ctx.fillStyle = 'black';
             if (cells[h][w] === 1) ctx.fillRect(dx, dy, cellsize, cellsize);
         }

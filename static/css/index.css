@@ -54,6 +54,19 @@ a.link-buttons:active {
 
 .description {
     font-family: 'Source Sans Pro', sans-serif;
+    padding: 4rem 8rem;
+    background: linear-gradient(180deg, #f9f9f9 10px, #fff 10px, #fff 20px, #fcfcfc 20px, #fcfcfc 30px, #fff 30px);
+    background-size: 1px 40px;
+    animation: description-anim 15s cubic-bezier(0.45, 0.05, 0.55, 0.95) normal infinite;
+}
+
+@keyframes description-anim {
+    0% {
+        background-position-y: 0;
+    }
+    100% {
+        background-position-y: 120px;
+    }
 }
 
 .description h1 {

@@ -32,8 +32,22 @@
                      style="filter: invert(100%)" />
             </div>
         </div>
-        <div class="description" style="margin: 4rem 8rem">
+        <div class="description">
             <h1>What is Casual Playground?</h1>
+            <div style="float: right; display: flex; flex-direction: column; padding: 10px; width: 25vw">
+                <a href="{{ url_for('static', filename='img/capl-screenshot-1.jpg') }}">
+                    <img src="{{ url_for('static', filename='img/capl-screenshot-1-small.jpg') }}" alt="screenshot"
+                         style="max-width: 100%" />
+                </a>
+                <a href="{{ url_for('static', filename='img/capl-screenshot-2.jpg') }}">
+                    <img src="{{ url_for('static', filename='img/capl-screenshot-2-small.jpg') }}" alt="screenshot"
+                         style="max-width: 100%" />
+                </a>
+                <a href="{{ url_for('static', filename='img/capl-screenshot-3.jpg') }}">
+                    <img src="{{ url_for('static', filename='img/capl-screenshot-3-small.jpg') }}" alt="screenshot"
+                         style="max-width: 100%" />
+                </a>
+            </div>
             <p>
                 Casual Playground (CaPl in short) is a customizable grid-based 2D sandbox inspired by cellular
                 automatons. Casual Playground contains all needed instruments for a cellular automata user to run any
