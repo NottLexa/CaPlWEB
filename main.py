@@ -37,67 +37,98 @@ def capl_api():
     file = request.args.get('file', type = str, default = None)
     subfolder = request.args.get('subfolder', type = str, default = None)
     mime = request.args.get('mime', type = str, default = None)
+    name = request.args.get('name', type = str, default = None)
+    addon = request.args.get('addon', type = str, default = None)
+
     if req in ['vi', 'version_info']:
         with open(script_dir+'/static/capl/version_info.json') as f:
             return f.read()
+
     elif req in ['user_settings']:
         with open(script_dir+'/static/capl/settings.json') as f:
             return f.read()
+
     elif req in ['localization', 'locstrings']:
         with open(script_dir+'/static/capl/core/localization.json') as f:
             return f.read()
+
     elif req in ['sprite']:
-        if file is not None and file.count('..') == 0:
-            if ntpath.isfile(script_dir+'/static/capl/core/sprites/'+file):
-                with open(script_dir+'/static/capl/core/sprites/'+file, 'rb') as f:
-                    return base64.b64encode(f.read())
-            else:
-                return 'false'
-        else:
+        if file is None or file.count('..') != 0:
             return 'false'
+        if not ntpath.isfile(script_dir+'/static/capl/core/sprites/'+file):
+            return 'false'
+        with open(script_dir+'/static/capl/core/sprites/'+file, 'rb') as f:
+            return base64.b64encode(f.read())
+
     elif req in ['sprites_list']:
-        if subfolder is not None and subfolder.count('..') == 0:
-            dir = script_dir+'/static/capl/core/sprites/'+(subfolder if subfolder is not None else '')
-            if ntpath.isdir(dir):
-                return json.dumps([{'type':'dir', 'name':x}
-                                   if ntpath.isdir(dir+'/'+x)
-                                   else {'type':'file', 'name':x}
-                                   for x in os.listdir(dir)])
-            else:
-                return 'false'
-        else:
+        if subfolder is None or subfolder.count('..') != 0:
             return 'false'
+        dir = script_dir+'/static/capl/core/sprites/'+(subfolder if subfolder is not None else '')
+        if not ntpath.isdir(dir):
+            return 'false'
+        return json.dumps([{'type':'dir', 'name':x}
+                           if ntpath.isdir(dir+'/'+x)
+                           else {'type':'file', 'name':x}
+                           for x in os.listdir(dir)])
+
     elif req in ['get_corecontent_folder']:
-        path = script_dir+'/static/capl/core/corecontent'
-        return json.dumps(os.listdir(path))
+        return json.dumps(os.listdir(script_dir+'/static/capl/core/corecontent'))
+
     elif req in ['get_corecontent_file']:
-        if file is not None and file.count('..') == 0:
-            if ntpath.isfile(script_dir+'/static/capl/core/corecontent/'+file):
-                if file.endswith('.png'):
-                    with open(script_dir+'/static/capl/core/corecontent/'+file, 'rb') as f:
-                        return base64.b64encode(f.read())
-                else:
-                    with open(script_dir+'/static/capl/core/corecontent/'+file) as f:
-                        return f.read()
-            else:
-                return 'false'
-        else:
+        if file is None or file.count('..') != 0:
             return 'false'
+        path = script_dir+'/static/capl/core/corecontent/'+file
+        if not ntpath.isfile(path):
+            return 'false'
+        if file.endswith('.png'):
+            with open(path, 'rb') as f:
+                return base64.b64encode(f.read())
+        else:
+            with open(path+file) as f:
+                return f.read()
+
     elif req in ['compile_corecontent_cell']:
-        if file is not None and file.count('..') == 0:
-            path = script_dir+'/static/capl/core/corecontent/'+file
-            if ntpath.isfile(path):
-                if file in cache['compiled_cells']:
-                    return cache['compiled_cells'][file]
-                else:
-                    popen_request = 'node '+script_dir+'/static/capl/cpl2json.js '+f'"./core/corecontent/{file}"'
-                    popen_return = os.popen(popen_request).read()
-                    cache['compiled_cells'][file] = popen_return
-                    return popen_return
-            else:
-                return 'false'
-        else:
+        if file is None or file.count('..') != 0:
             return 'false'
+        path = script_dir+'/static/capl/core/corecontent/'+file
+        if not ntpath.isfile(path):
+            return 'false'
+        if file in cache['compiled_cells']:
+            return cache['compiled_cells'][file]
+        else:
+            popen_request = 'node '+script_dir+'/static/capl/cpl2json.js '+f'"./core/corecontent/{file}"'
+            popen_return = os.popen(popen_request).read()
+            cache['compiled_cells'][file] = popen_return
+            return popen_return
+
+    elif req in ['addons']:
+        return json.dumps(os.listdir(script_dir+'/static/capl/data/addons'))
+
+    elif req in ['addon_folder']:
+        if addon is None or addon.count('..') != 0:
+            return 'false'
+        path = script_dir+'/static/capl/data/addons/'+addon
+        if not ntpath.isdir(path):
+            return 'false'
+        return json.dumps(os.listdir(path))
+
+    elif req in ['compile_addon_cell']:
+        if file is None or file.count('..') != 0:
+            return 'false'
+        if addon is None or addon.count('..') != 0:
+            return 'false'
+        fullname = addon+'/'+file
+        path = script_dir+'/static/capl/data/addons/'+fullname
+        if not ntpath.isfile(path):
+            return 'false'
+        if fullname in cache['compiled_cells']:
+            return cache['compiled_cells'][fullname]
+        else:
+            popen_request = 'node '+script_dir+'/static/capl/cpl2json.js '+f'"./data/addons/{fullname}"'
+            popen_return = os.popen(popen_request).read()
+            cache['compiled_cells'][fullname] = popen_return
+            return popen_return
+
     else:
         return 'false'
 

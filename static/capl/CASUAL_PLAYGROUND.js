@@ -362,7 +362,9 @@ const init2 = async function ()
         load_mod = async function(modfolder, mod_origin, official)
         {
             let mods = {};
-            let content = JSON.parse(await getapi('get_corecontent_folder'));
+            let content;
+            if (official === 1) content = JSON.parse(await getapi('get_corecontent_folder'));
+            else content = JSON.parse(await getapi('get_addon_folder', {addon: modfolder}));
             let i = 0;
             for (let k in content)
             {
@@ -371,7 +373,11 @@ const init2 = async function ()
                 {
                     loading_substate.innerText =
                         `Loading "${content[k]}" from "${modfolder}"... (${i}/${content.length})`;
-                    let compiled = JSON.parse(await getapi('compile_corecontent_cell', {file: content[k]}));
+                    let compiled;
+                    if (official === 1)
+                        compiled = JSON.parse(await getapi('compile_corecontent_cell', {file: content[k]}));
+                    else
+                        compiled = JSON.parse(await getapi('compile_addon_cell', {addon: modfolder, file: content[k]}));
                     let moddata = compiled.cell;
                     let concl = compiled.conc;
                     let cur = compiled.curs;
@@ -532,7 +538,6 @@ const init3 = async function ()
     else
     {
         coremods = await load_mod('corecontent', 'Casual Playground', 1);
-        console.log(coremods);
     }
     idlist.push(...Object.keys(coremods));
     objdata = {...objdata, ...coremods};
