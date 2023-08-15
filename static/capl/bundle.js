@@ -3473,14 +3473,9 @@ const EntMMStartMenu = new engine.Entity({
 
                     for (let mod of target.modlist.filter(x => x.enabled))
                     {
-                        target.gvars[0].load_mod(path.join('data', 'addons', mod.name), mod.name, false).then((loaded_mod)=>{
-                            console.log('I loaded mod: ');
-                            console.log(loaded_mod);
-                            idlist.push(...Object.keys(loaded_mod));
-                            for (let k in loaded_mod) objdata[k] = loaded_mod[k];
-                        });
-                        console.log(target.gvars[0].idlist);
-                        console.log(target.gvars[0].objdata);
+                        let loaded_mod = target.gvars[0].load_mod(path.join('data', 'addons', mod.name), mod.name, false);
+                        idlist.push(...Object.keys(loaded_mod));
+                        for (let k in loaded_mod) objdata[k] = loaded_mod[k];
                     }
 
                     target.gvars[0].current_room.do_end();
@@ -3502,14 +3497,16 @@ const EntMMStartMenu = new engine.Entity({
                         for (let mod of target.modlist.filter(x => x.enabled))
                         {
                             target.gvars[0].load_mod(path.join('data', 'addons', mod.name), mod.name, false).then((loaded_mod)=>{
+                                console.log(loaded_mod)
                                 idlist.push(...Object.keys(loaded_mod));
                                 for (let k in loaded_mod) objdata[k] = loaded_mod[k];
-                                target.gvars[0].loading_substate.innerText = '';
-                                target.gvars[0].current_room.do_end();
-                                target.gvars[0].current_room = target.gvars[0].room_field;
-                                target.gvars[0].current_room.do_start();
                             });
                         }
+                    }).then(()=>{
+                        target.gvars[0].loading_substate.innerText = '';
+                        target.gvars[0].current_room.do_end();
+                        target.gvars[0].current_room = target.gvars[0].room_field;
+                        target.gvars[0].current_room.do_start();
                     });
                 }
             }
