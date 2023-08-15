@@ -3496,8 +3496,9 @@ const EntMMStartMenu = new engine.Entity({
                     }).then(()=>{
                         for (let mod of target.modlist.filter(x => x.enabled))
                         {
-                            target.gvars[0].load_mod(path.join('data', 'addons', mod.name), mod.name, false).then((loaded_mod)=>{
-                                console.log(loaded_mod)
+                            console.log(mod);
+                            target.gvars[0].load_mod(mod.name, mod.name, 0).then((loaded_mod)=>{
+                                console.log(loaded_mod);
                                 idlist.push(...Object.keys(loaded_mod));
                                 for (let k in loaded_mod) objdata[k] = loaded_mod[k];
                             });
