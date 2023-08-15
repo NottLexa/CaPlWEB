@@ -3506,7 +3506,7 @@ const EntMMStartMenu = new engine.Entity({
                                 for (let k in loaded_mod) objdata[k] = loaded_mod[k];
                             }
                             target.gvars[0].loading_substate.innerText = '';
-                            target.gvars[0].loading_state.style.innerText = '';
+                            target.gvars[0].loading_state.innerText = '';
                             target.gvars[0].loading_spinner.style.display = 'none';
                             target.gvars[0].current_room.do_end();
                             target.gvars[0].current_room = target.gvars[0].room_field;
