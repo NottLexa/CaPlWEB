@@ -527,7 +527,9 @@ const init3 = async function ()
               'navigator': navigator,
               'running': true,
               'addonlist': [],
-              'loading_substate': loading_substate
+              'loading_substate': loading_substate,
+              'loading_state': loading_state,
+              'loading_spinner': loading_spinner,
               },
              {}];
 
@@ -722,7 +724,7 @@ const run = async function ()
         await init3(); loading_state.innerText = 'Loading... (4/5)'; loading_substate.innerText = '';
         await init4(); loading_state.innerText = 'Loading... (5/5)'; loading_substate.innerText = '';
         await init5(); loading_state.innerText = 'Loaded!'; loading_substate.innerText = '';
-        loading_state.style.display = 'none';
+        loading_state.style.innerText = '';
         loading_spinner.style.display = 'none';
         window.requestAnimationFrame(mainloop);
     }

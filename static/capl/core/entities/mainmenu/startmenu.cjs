@@ -103,6 +103,8 @@ const EntMMStartMenu = new engine.Entity({
                 }
                 else
                 {
+                    target.gvars[0].loading_spinner.style.display = 'block';
+                    target.gvars[0].loading_state.innerText = 'Loading addons...';
                     target.gvars[0].objdata = {};
                     objdata = target.gvars[0].objdata;
                     target.gvars[0].idlist = [];
@@ -121,6 +123,8 @@ const EntMMStartMenu = new engine.Entity({
                                 for (let k in loaded_mod) objdata[k] = loaded_mod[k];
                             }
                             target.gvars[0].loading_substate.innerText = '';
+                            target.gvars[0].loading_state.style.innerText = '';
+                            target.gvars[0].loading_spinner.style.display = 'none';
                             target.gvars[0].current_room.do_end();
                             target.gvars[0].current_room = target.gvars[0].room_field;
                             target.gvars[0].current_room.do_start();

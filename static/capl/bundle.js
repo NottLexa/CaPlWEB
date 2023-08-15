@@ -528,7 +528,9 @@ const init3 = async function ()
               'navigator': navigator,
               'running': true,
               'addonlist': [],
-              'loading_substate': loading_substate
+              'loading_substate': loading_substate,
+              'loading_state': loading_state,
+              'loading_spinner': loading_spinner,
               },
              {}];
 
@@ -723,7 +725,7 @@ const run = async function ()
         await init3(); loading_state.innerText = 'Loading... (4/5)'; loading_substate.innerText = '';
         await init4(); loading_state.innerText = 'Loading... (5/5)'; loading_substate.innerText = '';
         await init5(); loading_state.innerText = 'Loaded!'; loading_substate.innerText = '';
-        loading_state.style.display = 'none';
+        loading_state.style.innerText = '';
         loading_spinner.style.display = 'none';
         window.requestAnimationFrame(mainloop);
     }
@@ -3484,6 +3486,8 @@ const EntMMStartMenu = new engine.Entity({
                 }
                 else
                 {
+                    target.gvars[0].loading_spinner.style.display = 'block';
+                    target.gvars[0].loading_state.innerText = 'Loading addons...';
                     target.gvars[0].objdata = {};
                     objdata = target.gvars[0].objdata;
                     target.gvars[0].idlist = [];
@@ -3502,6 +3506,8 @@ const EntMMStartMenu = new engine.Entity({
                                 for (let k in loaded_mod) objdata[k] = loaded_mod[k];
                             }
                             target.gvars[0].loading_substate.innerText = '';
+                            target.gvars[0].loading_state.style.innerText = '';
+                            target.gvars[0].loading_spinner.style.display = 'none';
                             target.gvars[0].current_room.do_end();
                             target.gvars[0].current_room = target.gvars[0].room_field;
                             target.gvars[0].current_room.do_start();
