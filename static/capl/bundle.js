@@ -528,6 +528,7 @@ const init3 = async function ()
               'navigator': navigator,
               'running': true,
               'addonlist': [],
+              'loading_substate': loading_substate
               },
              {}];
 
@@ -3488,20 +3489,20 @@ const EntMMStartMenu = new engine.Entity({
                     target.gvars[0].idlist = [];
                     idlist = target.gvars[0].idlist;
                     new Promise((resolve, reject)=>{
-                        console.log(1);
                         target.gvars[0].load_mod('corecontent', 'Casual Playground', 1).then(resolve)
                     }).then((loaded_mod)=>{
-                        console.log(2);
                         idlist.push(...Object.keys(loaded_mod));
                         for (let k in loaded_mod) objdata[k] = loaded_mod[k];
                     }).then(()=>{
-                        console.log(3);
                         for (let mod of target.modlist.filter(x => x.enabled))
                         {
                             target.gvars[0].load_mod(path.join('data', 'addons', mod.name), mod.name, false).then((loaded_mod)=>{
-                                console.log(4, mod);
                                 idlist.push(...Object.keys(loaded_mod));
                                 for (let k in loaded_mod) objdata[k] = loaded_mod[k];
+                                target.gvars[0].loading_state.style.innerText = '';
+                                target.gvars[0].current_room.do_end();
+                                target.gvars[0].current_room = target.gvars[0].room_field;
+                                target.gvars[0].current_room.do_start();
                             });
                         }
                     });

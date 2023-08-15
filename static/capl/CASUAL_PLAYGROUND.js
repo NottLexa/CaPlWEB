@@ -527,6 +527,7 @@ const init3 = async function ()
               'navigator': navigator,
               'running': true,
               'addonlist': [],
+              'loading_substate': loading_substate
               },
              {}];
 
