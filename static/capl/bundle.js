@@ -359,11 +359,16 @@ const init2 = async function ()
     }
     else
     {
-        load_modlist = (modsfolder)=>([]); // PLACEHOLDER
+        load_modlist = async function()
+        {
+            return JSON.parse(await getapi('addon_list'));
+        };
         load_mod = async function(modfolder, mod_origin, official)
         {
             let mods = {};
-            let content = JSON.parse(await getapi('get_corecontent_folder'));
+            let content;
+            if (official === 1) content = JSON.parse(await getapi('get_corecontent_folder'));
+            else content = JSON.parse(await getapi('addon_folder', {addon: modfolder}));
             let i = 0;
             for (let k in content)
             {
@@ -372,7 +377,11 @@ const init2 = async function ()
                 {
                     loading_substate.innerText =
                         `Loading "${content[k]}" from "${modfolder}"... (${i}/${content.length})`;
-                    let compiled = JSON.parse(await getapi('compile_corecontent_cell', {file: content[k]}));
+                    let compiled;
+                    if (official === 1)
+                        compiled = JSON.parse(await getapi('compile_corecontent_cell', {file: content[k]}));
+                    else
+                        compiled = JSON.parse(await getapi('compile_addon_cell', {addon: modfolder, file: content[k]}));
                     let moddata = compiled.cell;
                     let concl = compiled.conc;
                     let cur = compiled.curs;
@@ -518,6 +527,7 @@ const init3 = async function ()
               'document': document,
               'navigator': navigator,
               'running': true,
+              'addonlist': [],
               },
              {}];
 
@@ -532,8 +542,8 @@ const init3 = async function ()
     }
     else
     {
+        gvars[0].addonlist = await load_modlist();
         coremods = await load_mod('corecontent', 'Casual Playground', 1);
-        console.log(coremods);
     }
     idlist.push(...Object.keys(coremods));
     objdata = {...objdata, ...coremods};
@@ -1274,10 +1284,12 @@ const EntFieldBoard = new engine.Entity({
         target.cells_to_redraw = [];
         target.surfaces = {board: target.gvars[0].document.createElement('canvas').getContext('2d'),
             grid: target.gvars[0].document.createElement('canvas').getContext('2d'),
-            selection: target.gvars[0].document.createElement('canvas').getContext('2d')};
+            selection: target.gvars[0].document.createElement('canvas').getContext('2d'),
+            instrument_highlight: target.gvars[0].document.createElement('canvas').getContext('2d')};
         target.surfaces.board.canvas.style.imageRendering = 'pixelated';
         target.surfaces.grid.canvas.style.imageRendering  = 'pixelated';
         target.surfaces.selection.canvas.style.imageRendering  = 'pixelated';
+        target.surfaces.instrument_highlight.canvas.style.imageRendering  = 'pixelated';
         target.gvars[0].update_board_fully = true;
         this.draw_board(target);
 
@@ -1391,6 +1403,7 @@ const EntFieldBoard = new engine.Entity({
         surface.drawImage(target.surfaces.board.canvas, realx, realy);
         surface.drawImage(target.surfaces.grid.canvas, realx, realy);
         surface.drawImage(target.surfaces.selection.canvas, realx, realy);
+        surface.drawImage(target.surfaces.instrument_highlight.canvas, realx, realy);
 
         let linex, liney, startx, starty, endx, endy;
         surface.fillStyle = target.gvars[0].rgb_to_style(...target.linecolor_outfield);
@@ -1544,7 +1557,7 @@ const EntFieldBoard = new engine.Entity({
     },
     mouse_up: function(target, mb)
     {
-        if (target.gvars[0].globalkeys.LMB && !target.gvars[0].field_sui.show) this.board_do_instrument_end(target);
+        if (mb === engine.LMB && !target.gvars[0].field_sui.show) this.board_do_instrument_end(target);
     },
     mouse_down: function(target, mb)
     {
@@ -1758,8 +1771,9 @@ const EntFieldBoard = new engine.Entity({
     board_do_instrument: function(target)
     {
         let current_instrument = target.gvars[0].current_instrument;
-        let bordersize = Math.floor(target.viewscale*target.gvars[0].cellbordersize);
-        let cellsize = bordersize + target.viewscale;
+        let vs = target.viewscale;
+        let bordersize = Math.floor(vs*target.gvars[0].cellbordersize);
+        let cellsize = bordersize + vs;
         let rx = target.gvars[0].mx + target.viewx - bordersize;
         let ry = target.gvars[0].my + target.viewy - bordersize;
         let cx = Math.floor(rx/cellsize);
@@ -1768,14 +1782,44 @@ const EntFieldBoard = new engine.Entity({
         let maxcy = target.board_height;
         let history_record = [];
         let commands = {
-            "selection_brush": (ix,iy)=>{target.selection[iy].set(ix, 1); update_selection = true},
+            "selection_brush": (ix,iy)=>{target.selection[iy].set(ix, 1); target.gvars[0].update_selection = true},
             "brush": (ix,iy)=>{
                 if (current_instrument.hasOwnProperty('cell') && current_instrument.cell !== target.board[iy][ix].cellid)
+                    history_record.push(this.change_cell(target, ix, iy, current_instrument.cell));
+            },
+            "line": (ex,ey)=>{
+                let surface_hl = target.surfaces.instrument_highlight;
+                surface_hl.canvas.width = (cellsize*target.board_width)+bordersize;
+                surface_hl.canvas.height = (cellsize*target.board_height)+bordersize;
+                surface_hl.clearRect(0,0,surface_hl.canvas.width,surface_hl.canvas.height);
+                surface_hl.fillStyle = 'rgba(132,198,215,0.4)';
+                let [sx, sy] = current_instrument.startpos;
+                let dx = ex-sx; let dy = ey-sy;
+                let dw = Math.abs(dx); let dh = Math.abs(dy);
+                if (dh > dw)
                 {
-                    history_record.push({type: "cell_changed", old: target.board[iy][ix].cellid,
-                        new: current_instrument.cell, x: ix, y: iy});
-                    target.board[iy][ix].reset(current_instrument.cell);
-                    target.cells_to_redraw.push([ix, iy]);
+                    for (let iy = 0; iy <= dh; iy++)
+                    {
+                        let cix = Math.round(engine.range2range(iy, 0, dh, sx, ex));
+                        let ciy = sy+iy*Math.sign(dy);
+                        if (0 <= cix && cix < target.board_width && 0 <= ciy && ciy < target.board_height)
+                            surface_hl.fillRect(cellsize*cix+bordersize, cellsize*ciy+bordersize, vs, vs);
+                    }
+                }
+                else if (dw > dh)
+                {
+                    for (let ix = 0; ix <= dw; ix++)
+                    {
+                        let cix = sx+ix*Math.sign(dx);
+                        let ciy = Math.round(engine.range2range(ix, 0, dw, sy, ey));
+                        if (0 <= cix && cix < target.board_width && 0 <= ciy && ciy < target.board_height)
+                            surface_hl.fillRect(cellsize*cix+bordersize, cellsize*ciy+bordersize, vs, vs);
+                    }
+                }
+                else {
+                    for (let ix = 0; ix <= dw; ix++)
+                        surface_hl.fillRect(cellsize*(sx+ix*Math.sign(dx))+bordersize,
+                            cellsize*(sy+ix*Math.sign(dy))+bordersize, target.viewscale, target.viewscale)
                 }
             },
         };
@@ -1802,8 +1846,12 @@ const EntFieldBoard = new engine.Entity({
                             }
                         }
                     }
-                    this.draw_board(target);
                 }
+                break;
+            case 'line':
+                let command = commands[current_instrument.type];
+                command(cx,cy);
+                target.gvars[0].update_board = true;
                 break;
         }
         if (history_record.length > 0) target.history.add_record(history_record);
@@ -1819,6 +1867,7 @@ const EntFieldBoard = new engine.Entity({
         let cy = Math.floor(ry/cellsize);
         let maxcx = target.board_width;
         let maxcy = target.board_height;
+        let history_record = [];
         let commands = {
             "paste": (ox,oy)=>{
                 if (current_instrument.hasOwnProperty('pastedata'))
@@ -1839,8 +1888,7 @@ const EntFieldBoard = new engine.Entity({
                                     if (current_instrument.pastedata[iy].hasOwnProperty(ix))
                                     {
                                         let cellid = target.gvars[0].idlist.indexOf(current_instrument.pastedata[iy][ix]);
-                                        target.board[jy][jx].reset(cellid);
-                                        target.cells_to_redraw.push([jx, jy]);
+                                        history_record.push(this.change_cell(target, jx, jy, cellid));
                                     }
                                 }
                             }
@@ -1848,6 +1896,10 @@ const EntFieldBoard = new engine.Entity({
                     }
                 }
             },
+            "line": (ox, oy)=>{
+                current_instrument.startpos = [ox, oy];
+                current_instrument.started = true;
+            }
         };
         switch (current_instrument.type)
         {
@@ -1856,13 +1908,71 @@ const EntFieldBoard = new engine.Entity({
                 {
                     let command = commands[current_instrument.type];
                     command(cx,cy);
-                    this.draw_board(target);
                 }
+                break;
+            case 'line':
+                let command = commands[current_instrument.type];
+                command(cx,cy);
+                break;
         }
+        if (history_record.length > 0) target.history.add_record(history_record);
     },
     board_do_instrument_end: function(target)
     {
-        // placeholder
+        let current_instrument = target.gvars[0].current_instrument;
+        let bordersize = Math.floor(target.viewscale*target.gvars[0].cellbordersize);
+        let cellsize = bordersize + target.viewscale;
+        let rx = target.gvars[0].mx + target.viewx - bordersize;
+        let ry = target.gvars[0].my + target.viewy - bordersize;
+        let cx = Math.floor(rx/cellsize);
+        let cy = Math.floor(ry/cellsize);
+        let maxcx = target.board_width;
+        let maxcy = target.board_height;
+        let history_record = [];
+        let commands = {
+            "line": (ex, ey)=>{
+                let [sx, sy] = current_instrument.startpos;
+                let dx = ex-sx; let dy = ey-sy;
+                let dw = Math.abs(dx); let dh = Math.abs(dy);
+                if (dh > dw)
+                {
+                    for (let iy = 0; iy <= dh; iy++)
+                        history_record.push(this.change_cell(target, Math.round(engine.range2range(iy, 0, dh, sx, ex)),
+                            sy+iy*Math.sign(dy), current_instrument.cell));
+                }
+                else if (dw > dh)
+                {
+                    for (let ix = 0; ix <= dw; ix++)
+                        history_record.push(this.change_cell(target, sx+ix*Math.sign(dx),
+                            Math.round(engine.range2range(ix, 0, dw, sy, ey)), current_instrument.cell));
+                }
+                else {
+                    for (let ix = 0; ix <= dw; ix++)
+                        history_record.push(this.change_cell(target, sx+ix*Math.sign(dx), sy+ix*Math.sign(dy),
+                            current_instrument.cell));
+                }
+            }
+        };
+        switch (current_instrument.type)
+        {
+            case 'line':
+                let command = commands[current_instrument.type];
+                command(cx,cy);
+                target.gvars[0].update_board = true;
+                break;
+        }
+        let surface_hl = target.surfaces.instrument_highlight;
+        surface_hl.canvas.width = (cellsize*target.board_width)+bordersize;
+        surface_hl.canvas.height = (cellsize*target.board_height)+bordersize;
+        surface_hl.clearRect(0,0,surface_hl.canvas.width,surface_hl.canvas.height);
+        if (history_record.length > 0) target.history.add_record(history_record);
+    },
+    change_cell: function (target, x, y, cellid)
+    {
+        target.board[y][x].reset(cellid);
+        target.cells_to_redraw.push([x, y]);
+        target.gvars[0].update_board = true;
+        return {type: "cell_changed", old: target.board[y][x].cellid, new: cellid, x: x, y: y};
     },
     canvas_resize: function(target, width, height)
     {
@@ -2116,7 +2226,7 @@ const EntFieldSUI = new engine.Entity({
                         target.gvars[0].current_instrument.scale = target.gvars[0].current_instrument.hasOwnProperty('scale')
                             ? target.gvars[0].current_instrument.scale : 1;
                         target.gvars[0].current_instrument.shape = target.gvars[0].current_instrument.hasOwnProperty('shape')
-                            ? target.gvars[0].current_instrument.scale : 'square';
+                            ? target.gvars[0].current_instrument.shape : 'square';
                         break;
                 }
                 break;
@@ -2126,7 +2236,9 @@ const EntFieldSUI = new engine.Entity({
                 target.gvars[0].current_instrument.scale = target.gvars[0].current_instrument.hasOwnProperty('scale')
                     ? target.gvars[0].current_instrument.scale : 1;
                 target.gvars[0].current_instrument.shape = target.gvars[0].current_instrument.hasOwnProperty('shape')
-                    ? target.gvars[0].current_instrument.scale : 'square';
+                    ? target.gvars[0].current_instrument.shape : 'square';
+                target.gvars[0].current_instrument.started = false;
+                target.gvars[0].current_instrument.startpos = [0,0];
                 break;
             default:
                 if (key.code.slice(0, 5) === 'Digit')
@@ -2169,14 +2281,13 @@ const EntFieldSUI = new engine.Entity({
                     case engine.LMB:
                         target.hotbar[target.hotbar_slot] =
                             {
-                                type: 'brush',
+                                type: ['brush', 'line'].includes(target.gvars[0].current_instrument.type)
+                                    ? target.gvars[0].current_instrument.type : 'brush',
                                 cell: ci,
                                 shape: target.gvars[0].current_instrument.hasOwnProperty('shape')
-                                    ? target.gvars[0].current_instrument.shape
-                                    : 'square',
+                                    ? target.gvars[0].current_instrument.shape : 'square',
                                 scale: target.gvars[0].current_instrument.hasOwnProperty('scale')
-                                    ? target.gvars[0].current_instrument.scale
-                                    : 1,
+                                    ? target.gvars[0].current_instrument.scale : 1,
                             };
                         target.gvars[0].current_instrument = target.hotbar[target.hotbar_slot];
                         break;
@@ -2483,6 +2594,7 @@ const EntFieldSUI = new engine.Entity({
         switch (target.gvars[0].current_instrument.type)
         {
             case 'brush':
+            case 'line':
                 let string = get_locstring(`instrument/shape/${target.gvars[0].current_instrument.shape}`)
                     +` [${target.gvars[0].current_instrument.scale}] | `+idlist[target.gvars[0].current_instrument.cell];
                 let string_limit = target.width_part-instr_name_length-ws-(ss*ws)-((1-ss)*img_box);
@@ -2600,6 +2712,7 @@ const EntFieldSUI = new engine.Entity({
 
             switch (instrument.type) {
                 case 'brush':
+                case 'line':
                     if (instrument.hasOwnProperty('cell'))
                     {
                         let celldata = objdata[idlist[instrument.cell]];
@@ -3279,7 +3392,10 @@ const EntMMStartMenu = new engine.Entity({
         let objdata = target.gvars[0].objdata;
         let idlist = target.gvars[0].idlist;
         let loc = target.gvars[0].loc;
-        target.modlist = load_modlist(modsfolder).map(value => ({name: value, enabled: false}));
+        if (target.gvars[0].platform === 'NODE')
+            target.modlist = load_modlist(modsfolder).map(value => ({name: value, enabled: false}));
+        else
+            target.modlist = target.gvars[0].addonlist.map(value => ({name: value, enabled: false}));
         target.line_height_origin = 30;
         target.line_height = target.line_height_origin;
         target.line_separation_origin = 2;
@@ -3360,16 +3476,31 @@ const EntMMStartMenu = new engine.Entity({
                         idlist.push(...Object.keys(loaded_mod));
                         for (let k in loaded_mod) objdata[k] = loaded_mod[k];
                     }
+
+                    target.gvars[0].current_room.do_end();
+                    target.gvars[0].current_room = target.gvars[0].room_field;
+                    target.gvars[0].current_room.do_start();
                 }
                 else
                 {
-                    // pass TODO: ADD MOD LOADING FOR WEB
+                    target.gvars[0].objdata = {};
+                    objdata = target.gvars[0].objdata;
+                    target.gvars[0].idlist = [];
+                    idlist = target.gvars[0].idlist;
+                    new Promise((resolve, reject)=>{
+                        target.gvars[0].load_mod('corecontent', 'Casual Playground', 1).then(()=>{resolve(loaded_mod)})
+                    }).then((loaded_mod)=>{
+                        idlist.push(...Object.keys(loaded_mod));
+                        for (let k in loaded_mod) objdata[k] = loaded_mod[k];
+                    }).then(()=>{
+                        for (let mod of target.modlist.filter(x => x.enabled))
+                        {
+                            let loaded_mod = target.gvars[0].load_mod(path.join('data', 'addons', mod.name), mod.name, false);
+                            idlist.push(...Object.keys(loaded_mod));
+                            for (let k in loaded_mod) objdata[k] = loaded_mod[k];
+                        }
+                    });
                 }
-
-                //engine.change_current_room(room_field);
-                target.gvars[0].current_room.do_end();
-                target.gvars[0].current_room = target.gvars[0].room_field;
-                target.gvars[0].current_room.do_start();
             }
         );
     },
@@ -3997,27 +4128,12 @@ const Instance = function (entity)
     this.entity = entity;
 };
 
-const Bitarray = function () // Array of bits -- TODO: REPLACE NUMBERS WITH BIGINTS
+const Bitarray = function ()
 {
-    this.value = [];
-    this.get = function(index)
-    {
-        while (index >= 32*this.value.length) this.value.push(0);
-        let divd = Math.floor(index/32); let modd = index % 32;
-        return (this.value[divd] & (1<<modd)) > 0;
-    };
-    this.invert = function(index)
-    {
-        while (index >= 32*this.value.length) this.value.push(0);
-        let divd = Math.floor(index/32); let modd = index % 32;
-        this.value[divd] ^= 1<<modd;
-    };
-    this.set = function(index, value)
-    {
-        while (index >= 32*this.value.length) this.value.push(0);
-        let divd = Math.floor(index/32);
-        if ((!!value) !== this.get(index)) this.invert(index);
-    };
+    this.value = 0n;
+    this.get = (index)=>((this.value & (1n<<BigInt(index))) > 0n);
+    this.invert = (index)=>{this.value ^= 1n<<BigInt(index)};
+    this.set = (index, value)=>{if ((!!value) !== this.get(index)) this.invert(index)};
 };
 
 const create_text_blob = (text) => (new Blob([text],{type:"text/plain"}));

@@ -12,7 +12,10 @@ const EntMMStartMenu = new engine.Entity({
         let objdata = target.gvars[0].objdata;
         let idlist = target.gvars[0].idlist;
         let loc = target.gvars[0].loc;
-        target.modlist = load_modlist(modsfolder).map(value => ({name: value, enabled: false}));
+        if (target.gvars[0].platform === 'NODE')
+            target.modlist = load_modlist(modsfolder).map(value => ({name: value, enabled: false}));
+        else
+            target.modlist = target.gvars[0].addonlist.map(value => ({name: value, enabled: false}));
         target.line_height_origin = 30;
         target.line_height = target.line_height_origin;
         target.line_separation_origin = 2;
@@ -93,16 +96,31 @@ const EntMMStartMenu = new engine.Entity({
                         idlist.push(...Object.keys(loaded_mod));
                         for (let k in loaded_mod) objdata[k] = loaded_mod[k];
                     }
+
+                    target.gvars[0].current_room.do_end();
+                    target.gvars[0].current_room = target.gvars[0].room_field;
+                    target.gvars[0].current_room.do_start();
                 }
                 else
                 {
-                    // pass TODO: ADD MOD LOADING FOR WEB
+                    target.gvars[0].objdata = {};
+                    objdata = target.gvars[0].objdata;
+                    target.gvars[0].idlist = [];
+                    idlist = target.gvars[0].idlist;
+                    new Promise((resolve, reject)=>{
+                        target.gvars[0].load_mod('corecontent', 'Casual Playground', 1).then(()=>{resolve(loaded_mod)})
+                    }).then((loaded_mod)=>{
+                        idlist.push(...Object.keys(loaded_mod));
+                        for (let k in loaded_mod) objdata[k] = loaded_mod[k];
+                    }).then(()=>{
+                        for (let mod of target.modlist.filter(x => x.enabled))
+                        {
+                            let loaded_mod = target.gvars[0].load_mod(path.join('data', 'addons', mod.name), mod.name, false);
+                            idlist.push(...Object.keys(loaded_mod));
+                            for (let k in loaded_mod) objdata[k] = loaded_mod[k];
+                        }
+                    });
                 }
-
-                //engine.change_current_room(room_field);
-                target.gvars[0].current_room.do_end();
-                target.gvars[0].current_room = target.gvars[0].room_field;
-                target.gvars[0].current_room.do_start();
             }
         );
     },

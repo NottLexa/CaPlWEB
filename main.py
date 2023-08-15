@@ -101,7 +101,7 @@ def capl_api():
             cache['compiled_cells'][file] = popen_return
             return popen_return
 
-    elif req in ['addons']:
+    elif req in ['addon_list']:
         return json.dumps(os.listdir(script_dir+'/static/capl/data/addons'))
 
     elif req in ['addon_folder']:

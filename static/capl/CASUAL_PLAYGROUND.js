@@ -358,13 +358,16 @@ const init2 = async function ()
     }
     else
     {
-        load_modlist = (modsfolder)=>([]); // PLACEHOLDER
+        load_modlist = async function()
+        {
+            return JSON.parse(await getapi('addon_list'));
+        };
         load_mod = async function(modfolder, mod_origin, official)
         {
             let mods = {};
             let content;
             if (official === 1) content = JSON.parse(await getapi('get_corecontent_folder'));
-            else content = JSON.parse(await getapi('get_addon_folder', {addon: modfolder}));
+            else content = JSON.parse(await getapi('addon_folder', {addon: modfolder}));
             let i = 0;
             for (let k in content)
             {
@@ -523,6 +526,7 @@ const init3 = async function ()
               'document': document,
               'navigator': navigator,
               'running': true,
+              'addonlist': [],
               },
              {}];
 
@@ -537,6 +541,7 @@ const init3 = async function ()
     }
     else
     {
+        gvars[0].addonlist = await load_modlist();
         coremods = await load_mod('corecontent', 'Casual Playground', 1);
     }
     idlist.push(...Object.keys(coremods));
