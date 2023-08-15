@@ -108,7 +108,7 @@ const EntMMStartMenu = new engine.Entity({
                     target.gvars[0].idlist = [];
                     idlist = target.gvars[0].idlist;
                     new Promise((resolve, reject)=>{
-                        target.gvars[0].load_mod('corecontent', 'Casual Playground', 1).then(()=>{resolve(loaded_mod)})
+                        target.gvars[0].load_mod('corecontent', 'Casual Playground', 1).then(resolve)
                     }).then((loaded_mod)=>{
                         idlist.push(...Object.keys(loaded_mod));
                         for (let k in loaded_mod) objdata[k] = loaded_mod[k];
