@@ -113,20 +113,18 @@ const EntMMStartMenu = new engine.Entity({
                         idlist.push(...Object.keys(loaded_mod));
                         for (let k in loaded_mod) objdata[k] = loaded_mod[k];
                     }).then(()=>{
-                        for (let mod of target.modlist.filter(x => x.enabled))
-                        {
-                            console.log(mod);
-                            target.gvars[0].load_mod(mod.name, mod.name, 0).then((loaded_mod)=>{
-                                console.log(loaded_mod);
+                        (async ()=>{
+                            for (let mod of target.modlist.filter(x => x.enabled))
+                            {
+                                let loaded_mod = await target.gvars[0].load_mod(mod.name, mod.name, 0);
                                 idlist.push(...Object.keys(loaded_mod));
                                 for (let k in loaded_mod) objdata[k] = loaded_mod[k];
-                            });
-                        }
-                    }).then(()=>{
-                        target.gvars[0].loading_substate.innerText = '';
-                        target.gvars[0].current_room.do_end();
-                        target.gvars[0].current_room = target.gvars[0].room_field;
-                        target.gvars[0].current_room.do_start();
+                            }
+                            target.gvars[0].loading_substate.innerText = '';
+                            target.gvars[0].current_room.do_end();
+                            target.gvars[0].current_room = target.gvars[0].room_field;
+                            target.gvars[0].current_room.do_start();
+                        })();
                     });
                 }
             }
