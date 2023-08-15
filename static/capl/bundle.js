@@ -725,7 +725,7 @@ const run = async function ()
         await init3(); loading_state.innerText = 'Loading... (4/5)'; loading_substate.innerText = '';
         await init4(); loading_state.innerText = 'Loading... (5/5)'; loading_substate.innerText = '';
         await init5(); loading_state.innerText = 'Loaded!'; loading_substate.innerText = '';
-        loading_state.style.innerText = '';
+        loading_state.innerText = '';
         loading_spinner.style.display = 'none';
         window.requestAnimationFrame(mainloop);
     }
