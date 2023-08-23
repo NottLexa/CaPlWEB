@@ -22,16 +22,16 @@ def e404(error):
 def page_index():
     return render_template('index.html')
 
-@app.route('/', subdomain='capl')
-@app.route('/index', subdomain='capl')
+@app.route('/capl')
+@app.route('/capl/index')
 def page_capl_index():
     return render_template('capl/index.html')
 
-@app.route('/play', subdomain='capl')
+@app.route('/capl/play')
 def page_play():
     return render_template('capl/play.html')
 
-@app.route('/api', subdomain='capl')
+@app.route('/capl/api')
 def capl_api():
     req = request.args.get('request', type = str, default = None)
     file = request.args.get('file', type = str, default = None)
