@@ -18,11 +18,12 @@ Casual Playground. If not, see <https://www.gnu.org/licenses/>.
 */
 
 //#region [IMPORT & INIT]
-var platform, api_server, httpGetAsync, getapi;
+var platform, httpGetAsync, getapi;
 var engine, comp, ccc, ents, fs, path, vi, ctt;
 var version, dvlp_stage, dvlp_build;
 var scale, WIDTH, HEIGHT, WIDTH2, HEIGHT2, canvas_element, canvas_container, display;
 var loading_state, loading_substate, loading_spinner;
+var api_server = 'http://capl.rubeam.com/api';
 platform = document.getElementById('script').hasAttribute('platform')
     ? document.getElementById('script').getAttribute('platform') : 'WEB';
 const init1 = async function ()
@@ -64,7 +65,6 @@ const init1 = async function ()
         loading_state = document.getElementById('LoadingState');
         loading_substate = document.getElementById('LoadingSubstate');
         loading_spinner = document.getElementById('LoadingSpinner');
-        api_server = 'http://185.251.88.244/api';
         httpGetAsync = async function(theUrl)
         {
             return new Promise(function (resolve, reject) {

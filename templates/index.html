@@ -1,29 +1,35 @@
 {% extends "ext.html" %}
 
 {% block head %}
-<title>Casual Playground</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}" />
+    <title>Casual Playground</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}" />
+    <meta name="title" content="Rubeam" />
+    <meta name="description" content="NotLexa's website. Casual Playground Online is deployed here." />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="content-language" content="en-GB" />
+    <meta name="keywords" content="capl, casual playground, capla, cpl, casualplayground, notlexa, nl, cellular, automata, automatons">
+    <meta name="revisit-after" content="15 days" />
 {% endblock %}
 
 {% block body %}
-<div style="font-family: 'Montserrat', sans-serif">
-    <div class="frontpage-bg" style="height: 100vh">
-        <canvas id="golcanvas" style="width: 100%; height: 100%; image-rendering: pixelated;"></canvas>
-        <div class="centered text-animation" style="text-align: center">
-            <h1 style="margin: 0; font-size: 250%">NotLexa</h1>
+    <div style="font-family: 'Montserrat', sans-serif">
+        <div class="frontpage-bg" style="height: 100vh">
+            <canvas id="golcanvas" style="width: 100%; height: 100%; image-rendering: pixelated;"></canvas>
+            <div class="centered text-animation" style="text-align: center">
+                <h1 style="margin: 0; font-size: 250%">NotLexa</h1>
+            </div>
+            <div class="centered text-animation" style="top: 60%; width: 50%; display: flex; justify-content: center; flex-wrap: wrap">
+                <a class="link-buttons" style="border-color: #8df; color: #8df" href="https://capl.rubeam.com">
+                    Casual Playground
+                </a>
+                <a class="link-buttons" style="border-color: #f55; color: #f55" href="https://youtube.com/@notlexa">
+                    YouTube
+                </a>
+            </div>
         </div>
-        <div class="centered text-animation" style="top: 60%; width: 50%; display: flex; justify-content: center; flex-wrap: wrap">
-            <a class="link-buttons" style="border-color: #8df; color: #8df" href="/capl">
-                Casual Playground
-            </a>
-            <a class="link-buttons" style="border-color: #f55; color: #f55" href="https://youtube.com/@notlexa">
-                YouTube
-            </a>
+        <div style="height: 4rem; background: none; position: relative; font-size: 50%; margin-top: -4rem">
+            <div class="centered" style="color: #fff">Copyright © 2023 Alexey Kozhanov</div>
         </div>
     </div>
-    <div style="height: 4rem; background: none; position: relative; font-size: 50%; margin-top: -4rem">
-        <div class="centered" style="color: #fff">Copyright © 2023 Alexey Kozhanov</div>
-    </div>
-</div>
-<script id="script" src="{{ url_for('static', filename='js/index.js') }}"></script>
+    <script id="script" src="{{ url_for('static', filename='js/index.js') }}"></script>
 {% endblock %}
